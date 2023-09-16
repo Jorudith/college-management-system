@@ -1,0 +1,38 @@
+# Ignore Mac system files
+.DS_store
+
+# Ignore node_modules folder
+node_modules/
+
+# Ignore json files
+json/
+*.json
+
+# Ignore all text files
+*.txt
+doc/
+
+# Ignore img folder
+img/
+
+# Ignore lib folder
+lib/
+
+# Ignore all log files
+*.log
+log/
+
+# Ignore dist folder
+dist/
+
+# Ignore build folder
+build/
+
+# Ignore bin folder
+bin/
+
+# Ignore files related to API keys
+.env
+
+# Ignore SASS config files
+.sass-cache
