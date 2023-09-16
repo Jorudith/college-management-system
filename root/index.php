@@ -1,3 +1,7 @@
+<?php
+    session_unset();
+?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -17,7 +21,7 @@
     <main>
         <section>
             <div class="fxbx">
-                <form>
+                <form method="post" action="php/includes/process.php">
                     <h1>SIGN IN</h1>
                     <label for="username">Username</label>
                     <input id="username" type="text" name="username" placeholder="Enter username..." >

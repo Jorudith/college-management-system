@@ -17,3 +17,9 @@ Added css, php, js folders
 
 230916 16:55
 TODO: PHP for index.php
+
+# Project Sep 16, 2023 6:05 pm
+- Added process.php
+- Added some php code in index.php and home.php
+- Used the old database for a bit for testing
+- Used home.php for testing if user is signed in

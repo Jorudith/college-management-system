@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    echo $_SESSION["username"]."has logged in";
+?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
