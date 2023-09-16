@@ -33,3 +33,12 @@
 # Database
 	- Normalization of database
 
+	- student
+	- teacher
+	- staff
+	- admin
+	- parent
+	- admin
+	- attendance
+	- course
+	- class
