@@ -1,0 +1,112 @@
+/* IMPORTS */
+    /* FOR FONT */
+    @import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;display=swap');
+
+/* VARIABLES */
+:root {
+    /* PALETTE */
+    --light-blue: rgb(227, 229, 241);
+    --white: hsla(22, 36%, 96%);
+    --black: hsl(30, 35%, 9%);
+    --tint: hsla(28, 59%, 11%, 0.9);
+    --shadow: hsla(30, 33%, 4%, 0.24) 0px 2px 5px 0px, hsla(30, 33%, 4%, 0.24) 0px 1px 1px 0px;
+
+    /* FONT */
+    --ff-base: 'Poppins', sans-serif;
+    --fs-root: calc(62.5% + .190625vw);
+    --fs-base: 1.6rem;
+    --fw-base: 400;
+    --lh-base: 1.2;
+
+    /* FONT SIZE */
+    --fs-xxl : 3rem;
+    --fs-xl: 2.5rem;
+    --fs-l: 2rem;
+    --fs-n: 1.6rem;
+    --fs-s: 1.4rem;
+    --fs-xs: 1.2rem;
+    --fs-xxs: .6rem;
+
+    /* FONT WEIGHT */
+    --fw-xh: 700;
+    --fw-h: 600;
+    --fw-n: 400;
+    --fw-l: 300;
+    --fw-xl: 200;
+
+    /* BANNER */
+    --h-flban: 75vh;
+    --h-hlban: 45vh;
+
+    /* BORDER */
+    --br-base: 10px;
+
+    /* GAP */
+    /* should be same as --lh-base */
+    --g-base: 1.2rem;
+
+    /* TEXT-INDENT */
+    --ti-base: 2rem;
+
+    /* TRANSITION */
+    --tr-base: 0.3s;
+
+    /* SECTION */
+    --m-sec: 2vw 1.5rem;
+    --w-sec: calc(100% - (2 * var(--m-sec)));
+
+    /* SPACE */
+    --p-i: calc(.2rem + .190625vw);
+
+    /* Z-INDEX */
+}
+
+/* ELEMENTS */
+/* to override default css element values */
+* {
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: var(--ff-base);
+    line-height: var(--lh-base);
+    word-break: break-word;
+}
+html {
+    scroll-behavior: smooth;
+
+    font-size: var(--fs-root);
+}
+body {
+    background-color: var(--light-blue);
+
+    font-size: var(--fs-base);
+    font-weight: var(--fw-base);
+}
+a {
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+}
+i {
+    padding: var(--p-i);
+}
+section {
+    margin: var(--m-sec);
+
+    max-height: min-content;
+    width: var(--w-sec);
+
+    border-radius: var(--br-base);
+
+    box-shadow: var(--shadow);
+}
+img {
+    max-width: 100%;
+}
+input, button {
+    border: none;
+    outline: none;
+}

@@ -7,3 +7,6 @@
 # Checking phase
 
 # Sa "root" folder maglagay ng new and improved version
+
+230916 14:45
+Added css, php, js folders
