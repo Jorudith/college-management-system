@@ -1,0 +1,35 @@
+# Functions
+	Sign in
+
+
+	Management of Student
+	- Add student
+	- View students
+	- Update student 
+	- delete student
+	Management of Teacher
+	- Add teacher
+	- View teachers
+	- Update teacher
+	- Delete teacher
+	Management of courses
+	- Add course
+	- View courses
+	- Delete courses
+	Viewing of attendance
+	- Teacher attendance
+	- Staff attendance
+	- View attendance
+	Capstone Schedule
+	- Create capstone schedule
+	- View capstone schedule
+	- Update capstone schedule
+	Report
+	- Teacher
+	- Course Id
+	- Class
+	- #OF Students
+
+# Database
+	- Normalization of database
+

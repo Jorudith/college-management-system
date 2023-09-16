@@ -12,4 +12,5 @@ Added css, php, js folders
 # Project Sep 16, 2023 3:22 pm
 - Added dbh.php for database connection
 
-testing daw
+# Project Sep 16, 2023 4:45 pm
+- Added doc folder with requirements file

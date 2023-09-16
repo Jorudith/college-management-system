@@ -8,10 +8,6 @@ node_modules/
 json/
 *.json
 
-# Ignore all text files
-*.txt
-doc/
-
 # Ignore img folder
 img/
 
