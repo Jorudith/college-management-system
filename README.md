@@ -14,3 +14,6 @@ Added css, php, js folders
 
 # Project Sep 16, 2023 4:45 pm
 - Added doc folder with requirements file
+
+230916 16:55
+TODO: PHP for index.php

@@ -15,30 +15,21 @@
     <link rel="stylesheet" charset="UTF-8" type="text/css" href="css/style.css">
 </head>
 <body>
-    <section class="sec-a fxbx-b">
-            <div class="fxbx-b frbx">
-                <form class="fxbx-b fr" action="includes/process.php" method="POST">
-                    <h1 class="tt-imgban">Sign In</h1>
-                    <div class="fxbx-g">
-                        <label for="email" class="fr-lbl">Email address</label>
-                        <input id="email" class="fr-in" type="text" name="email" placeholder="Enter email address..." >
-
-                    </div>
-                    <div class="fxbx-g">
-                        <label for="password" class="fr-lbl">Password</label>
-                        <input id="password" class="fr-in"  type="password" name="pass" placeholder="Enter password..." >
-
-                    </div>
-                    <button class="fr-btn" name="button" value="signin">Submit</button>
-                    <!-- <button class="fr-btn" name="button" value="getrows">Get Rows</button> -->
-                    <a class="fr-url" href="up.php">Don't have an account? Click here!</a>
+    <main>
+        <section>
+            <div class="fxbx">
+                <form>
+                    <h1>SIGN IN</h1>
+                    <label for="username">Username</label>
+                    <input id="username" type="text" name="username" placeholder="Enter username..." >
+                    <label for="password">Password</label>
+                    <input id="password" type="text" name="password" placeholder="Enter password..." >
+                    <button name="button" value="signin">SIGN IN</button>
                 </form>
-        </div>
-    </section>
+            </div>
+        </section>
+    </main>
 
-    <div class="breathe breathe-b"></div>
-</main>
-
-<script src="../js/main.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 </html>
