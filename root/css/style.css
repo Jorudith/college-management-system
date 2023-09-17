@@ -72,3 +72,33 @@ main {
 
     align-self: center;
 }
+.mnct {
+    gap: 2rem;
+    display: flex;
+    flex-flow: row wrap;
+}
+.mnbx {
+    padding: 1rem;
+
+    border: 1px black solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: left;
+}
+table {
+    width: 100%;
+}
+th, td {
+    padding: .3rem;
+}
+th.date {
+    width: 18rem;
+}
+th.status {
+    width: 10rem;
+}
