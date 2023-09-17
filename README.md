@@ -27,3 +27,6 @@ TODO: PHP for index.php
 230917 13:55
 TODO: PHP for index.php, PHP for home.php admin > attendance
 TODO: HTML for home.php admin > capstone schedules
+
+# Project Sep 17, 2023 2:10 pm
+- Added some php code in home.php for greetings and logout

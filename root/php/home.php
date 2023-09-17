@@ -1,6 +1,5 @@
 <?php
-    // session_start();
-    // echo $_SESSION["username"]."has logged in";
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -22,8 +21,19 @@
     <main>
         <section>
             <div class="fxbx">
-                <h1 style="display: inline;">Welcome, Admin.</h1>
-                <p style="position: relative; left: 2rem; display: inline;">LOG OUT</p>
+                <h1 style="display: inline;">Welcome, 
+                    <?php
+                        $substr = substr($_SESSION["username"], 0, 2);
+                        if ($substr === "ad") {
+                            echo "Admin";
+                        } else if ($substr === "te") {
+                            echo "Teacher";
+                        } else if ($substr === "st") {
+                            echo "Student";
+                        }
+                    ?>
+                .</h1>
+                <p style="position: relative; left: 2rem; display: inline;"><a href="../index.php">LOG OUT</a></p>
                 <div class="fxbx mnct" style="margin-top: 2rem;">
                     <div class="mnbx">
                         <p style="text-align: center; font-weight: 600;">Attendance</p>
