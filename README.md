@@ -23,3 +23,7 @@ TODO: PHP for index.php
 - Added some php code in index.php and home.php
 - Used the old database for a bit for testing
 - Used home.php for testing if user is signed in
+
+230917 13:55
+TODO: PHP for index.php, PHP for home.php admin > attendance
+TODO: HTML for home.php admin > capstone schedules
