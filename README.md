@@ -30,3 +30,12 @@ TODO: HTML for home.php admin > capstone schedules
 
 # Project Sep 17, 2023 2:10 pm
 - Added some php code in home.php for greetings and logout
+
+# Project Sep 19, 2023 3:30 pm
+- Added and altered some code in home.php
+    # ALTERS
+    - paragraphs to select tags
+    - div to form
+    # Added
+    - php code for selection of options
+    - php code and sql code for the availability of selecting years within the database

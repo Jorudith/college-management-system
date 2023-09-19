@@ -1,5 +1,14 @@
 <?php
+    include "includes/dbh.php";
     session_start();
+
+    $year = $_POST["year"] ?? "";
+    $month = $_POST["month"] ?? "";
+    $status = $_POST["status"] ?? "";
+    $role = $_POST["role"] ?? "";
+
+    $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
+    $year_results = mysqli_query($conn, $year_sql);
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +41,7 @@
                             echo "Student";
                         }
                     ?>
-                .</h1>
+                </h1>
                 <p style="position: relative; left: 2rem; display: inline;"><a href="../index.php">LOG OUT</a></p>
                 <div class="fxbx mnct" style="margin-top: 2rem;">
                     <div class="mnbx">
@@ -55,66 +64,101 @@
                     </div>
                 </div>
                 <div class="att">
-                    <div class="fxbx mnct" style="margin: 2rem 0;">
+                    <form class="fxbx mnct form" style="margin: 2rem 0;" action="home.php" method="post">
                         <div class="mnbx">
-                            <p style="text-align: center; font-weight: 600;">Year</p>
+                            <select style="text-align: center; font-weight: 600;" name="year" required>
+                                <option disabled selected hidden value="">Year</option>
+                                <?php
+                                    foreach($year_results as $year_result) {
+                                        $curr_year = $year_result["year"];
+                                        echo "<option ".($year == $curr_year ? "selected" : "").">$curr_year</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>  
+                        <div class="mnbx">
+                            <select style="text-align: center; font-weight: 600;" name="month" required>
+                                <option disabled <?php echo empty($month) ? "selected" : ""; ?> hidden value="">Month</option>
+                                <option <?php echo $month == "all" ? "selected" : ""; ?> value="all">All months</option>
+                                <option <?php echo $month == "1" ? "selected" : ""; ?> value="1">January</option>
+                                <option <?php echo $month == "2" ? "selected" : ""; ?> value="2">February</option>
+                                <option <?php echo $month == "3" ? "selected" : ""; ?> value="3">March</option>
+                                <option <?php echo $month == "4" ? "selected" : ""; ?> value="4">April</option>
+                                <option <?php echo $month == "5" ? "selected" : ""; ?> value="5">May</option>
+                                <option <?php echo $month == "6" ? "selected" : ""; ?> value="6">June</option>
+                                <option <?php echo $month == "7" ? "selected" : ""; ?> value="7">July</option>
+                                <option <?php echo $month == "8" ? "selected" : ""; ?> value="8">August</option>
+                                <option <?php echo $month == "9" ? "selected" : ""; ?> value="9">September</option>
+                                <option <?php echo $month == "10" ? "selected" : ""; ?> value="10">October</option>
+                                <option <?php echo $month == "11" ? "selected" : ""; ?> value="11">November</option>
+                                <option <?php echo $month == "12" ? "selected" : ""; ?> value="12">December</option>
+                            </select>
                         </div>
                         <div class="mnbx">
-                            <p style="text-align: center; font-weight: 600;">Month</p>
+                            <select style="text-align: center; font-weight: 600;" name="status" required>
+                                <option disabled selected hidden value="">Status</option>
+                                <option <?php echo $status == "present" ? "selected" : ""; ?> value="present">Present</option>
+                                <option <?php echo $status == "absent" ? "selected" : ""; ?> value="absent">Absent</option>
+                            </select>
                         </div>
                         <div class="mnbx">
-                            <p style="text-align: center; font-weight: 600;">Status</p>
+                            <select style="text-align: center; font-weight: 600;" name="role" required>
+                                <option disabled selected hidden value="">Role</option>
+                                <option <?php echo $role == "admin" ? "selected" : ""; ?> value="admin">Admin</option>
+                                <option <?php echo $role == "teacher" ? "selected" : ""; ?> value="teacher">Teacher</option>
+                                <option <?php echo $role == "student" ? "selected" : ""; ?> value="student">Student</option>
+                            </select>   
                         </div>
                         <div class="mnbx">
-                            <p style="text-align: center; font-weight: 600;">Role</p>
+                            <button type="submit" name="submit" value="submit" style="text-align: center; font-weight: 600;">Submit</button>
                         </div>
-                    </div>
-                    <div>
-                        <div style="display: inline">
-                            <table>
-                                <tr>
-                                    <th class="date" style="font-weight: 600;">Date</th>
-                                    <th class="status" style="font-weight: 600;">Status</th>
-                                    <th class="name" style="font-weight: 600;">Name</th>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 1</td>
-                                    <td>Present</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 2</td>
-                                    <td>Absent</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 3</td>
-                                    <td>Present</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 4</td>
-                                    <td>Present</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 5</td>
-                                    <td>Absent</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 6</td>
-                                    <td>Present</td>
-                                    <td>John Doe
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div style="display: inline">
+                        <table>
+                            <tr>
+                                <th class="date" style="font-weight: 600;">Date</th>
+                                <th class="status" style="font-weight: 600;">Status</th>
+                                <th class="name" style="font-weight: 600;">Name</th>
+                            </tr>
+                            <tr>
+                                <td>2023 September 1</td>
+                                <td>Present</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023 September 2</td>
+                                <td>Absent</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023 September 3</td>
+                                <td>Present</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023 September 4</td>
+                                <td>Present</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023 September 5</td>
+                                <td>Absent</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023 September 6</td>
+                                <td>Present</td>
+                                <td>John Doe
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
