@@ -37,5 +37,6 @@ TODO: HTML for home.php admin > capstone schedules
     - paragraphs to select tags
     - div to form
     # Added
+    - html code (button) for submitting filters
     - php code for selection of options
     - php code and sql code for the availability of selecting years within the database
