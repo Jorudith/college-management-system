@@ -9,6 +9,7 @@
 
     $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
     $year_results = mysqli_query($conn, $year_sql);
+    
 ?>
 
 <!DOCTYPE html>
@@ -116,49 +117,47 @@
                 </div>
                 <div>
                     <div style="display: inline">
+                        <?php
+                            // if (isset($_POST["submit"]) && $_POST == "submit") {
+                            //     $attendance_sql = "SELECT * FROM `attendance` ORDER BY `date` ASC;";
+                            //     $attendance_results = mysqli_query($conn, $attendance_sql);
+
+                            //     echo "
+                            //     <table>
+                            //         <tr>
+                            //             <th class='date' style='font-weight: 600;'>Date</th>
+                            //             <th class='status' style='font-weight: 600;'>Status</th>
+                            //             <th class='name' style='font-weight: 600;'>Name</th>
+                            //         </tr> 
+                            //     ";
+                            //     foreach($attendance_results as $attendance_result) {
+                            //         echo "
+                            //         <tr>
+                            //             <td>$year</td>
+                            //             <td>$status</td>
+                            //             <td>".$attendance_result[""]."
+                            //         </tr>
+                            //         ";
+                            //     }
+                            //     echo "
+                            //     </table>
+                            //     ";
+                            // }
+                        ?>
                         <table>
-                            <tr>
-                                <th class="date" style="font-weight: 600;">Date</th>
-                                <th class="status" style="font-weight: 600;">Status</th>
-                                <th class="name" style="font-weight: 600;">Name</th>
-                            </tr>
-                            <tr>
-                                <td>2023 September 1</td>
-                                <td>Present</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023 September 2</td>
-                                <td>Absent</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023 September 3</td>
-                                <td>Present</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023 September 4</td>
-                                <td>Present</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023 September 5</td>
-                                <td>Absent</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023 September 6</td>
-                                <td>Present</td>
-                                <td>John Doe
-                                </td>
-                            </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                        </tr>
+                        <tr>
+                            <td>2023 September 1</td>
+                            <td>Present</td>
+                            <td>John Doe
+                            </td>
+                        </tr>
                         </table>
+                        <!-- </table> -->
                     </div>
                 </div>
             </div>

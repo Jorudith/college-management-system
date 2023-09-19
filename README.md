@@ -40,3 +40,7 @@ TODO: HTML for home.php admin > capstone schedules
     - html code (button) for submitting filters
     - php code for selection of options
     - php code and sql code for the availability of selecting years within the database
+
+# Project Sep 19, 2023 6:08 pm
+- Added some code for dynamic table.
+- TODO: dynamic table. (database must be done)
