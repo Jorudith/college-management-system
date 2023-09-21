@@ -44,3 +44,7 @@ TODO: HTML for home.php admin > capstone schedules
 # Project Sep 19, 2023 6:08 pm
 - Added some code for dynamic table.
 - TODO: dynamic table. (database must be done)
+
+230921 22:55
+DONE: HTML CSS of index.php, HTML CSS of home.php admin > attendance
+TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance

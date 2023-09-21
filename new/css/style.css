@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;display=swap');
+
+:root {
+
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+* {
+    vertical-align: baseline;
+    font-weight: inherit;
+    font-family: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    border: 0 none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+}
+html {
+    scroll-behavior: smooth;
+
+    font-size: calc(62.5% + .190625vw);
+}
+body {
+    font-size: 1.6rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+
+    line-height: 1.5;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+img {
+    object-fit: contain;
+}
+input, button, textarea, select {
+    font: inherit;
+}
+input, button {
+    padding: 0.2rem 0;
+}
+input {
+    border-bottom: 1px solid black;
+}
+button {
+    padding: 0 1rem;
+}
+button:hover {
+    background-color: black;
+    color: white;
+}
+a {
+    text-decoration: none;
+}
+ol, ul {
+    list-style: none;
+}
+h1, h2, h3, h4, h5, h6, p {
+    overflow-wrap: break-word;
+}
+header {
+    padding: 2rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    border-bottom: 1px solid black;
+}
+main {
+    height: fit-content;
+    width: 100%;
+}
+/* footer {
+} */
+section {
+    height: fit-content;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+form {
+    padding: 2rem 0;
+}
+.signin {
+    height: 100vh;
+    width: 60%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.signin-form {
+    height: 60%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+}
+.signin-input {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+}
+.signin-logo {
+    display: flex;
+    height: 60%;
+    width: 25rem;
+}
+.header-logo {
+    width: 10rem;
+}
+.navigation-ul {
+    width: 100%;
+    gap: 2rem;
+    display: flex;
+    flex-flow: row nowrap;
+}
+.attendance {
+    padding: 2rem 4rem;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2rem;
+
+    border-bottom: 1px solid black;
+}
+.attendance-ul {
+    display: flex;
+    gap: 2rem;
+}
+.attendance-tb {
+    width: 100%;
+}
+.attendance-tb th, td {
+    padding: 0 1rem;
+    border: 2px solid black;
+}
+.capstoneschedule {
+    padding: 2rem 4rem;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 2rem;
+
+    border-bottom: 1px solid black;
+}
+.capstoneschedule-tb {
+    width: 100%;
+}
+.capstoneschedule-tb th, td {
+    padding: 0 1rem;
+    border: 2px solid black;
+}
+.capstoneschedule-form {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+}
+.capstoneschedule-input {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+}
