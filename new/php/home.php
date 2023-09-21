@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div class="capstoneschedule">
-                <div>
+                <div style="width: 100%;">
                     <table class="capstoneschedule-tb">
                         <tr>
                             <th style="font-weight: 650;">ID</th>
@@ -139,6 +139,11 @@
                                 <option value="0">Choose ID:</option>
                                 <option value="1">00001</option>
                             </select>
+                        </div>
+
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="date">DATE</label>
+                            <input style="width: 60%;" type="date">
                         </div>
 
                         <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
