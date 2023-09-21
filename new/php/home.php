@@ -57,13 +57,45 @@
         <section>
             <div class="attendance">
                 <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                    <ul class="attendance-ul">
-                        <li>Year</li>
-                        <li>Month</li>
-                        <li>Status</li>
-                        <li>Role</li>
-                    </ul>
-                    <button>SEE ATTENDANCE</button>
+                    <form style="display: flex; gap: 2rem;">
+                        <select style="text-align: center; font-weight: 600;" name="year" required>
+                            <option disabled selected hidden value="">Year</option>
+                            <?php
+                                foreach($year_results as $year_result) {
+                                    $curr_year = $year_result["year"];
+                                    echo "<option ".($year == $curr_year ? "selected" : "").">$curr_year</option>";
+                                }
+                            ?>
+                        </select>
+                        <select style="text-align: center; font-weight: 600;" name="month" required>
+                            <option disabled <?php echo empty($month) ? "selected" : ""; ?> hidden value="">Month</option>
+                            <option <?php echo $month == "all" ? "selected" : ""; ?> value="all">All months</option>
+                            <option <?php echo $month == "1" ? "selected" : ""; ?> value="1">January</option>
+                            <option <?php echo $month == "2" ? "selected" : ""; ?> value="2">February</option>
+                            <option <?php echo $month == "3" ? "selected" : ""; ?> value="3">March</option>
+                            <option <?php echo $month == "4" ? "selected" : ""; ?> value="4">April</option>
+                            <option <?php echo $month == "5" ? "selected" : ""; ?> value="5">May</option>
+                            <option <?php echo $month == "6" ? "selected" : ""; ?> value="6">June</option>
+                            <option <?php echo $month == "7" ? "selected" : ""; ?> value="7">July</option>
+                            <option <?php echo $month == "8" ? "selected" : ""; ?> value="8">August</option>
+                            <option <?php echo $month == "9" ? "selected" : ""; ?> value="9">September</option>
+                            <option <?php echo $month == "10" ? "selected" : ""; ?> value="10">October</option>
+                            <option <?php echo $month == "11" ? "selected" : ""; ?> value="11">November</option>
+                            <option <?php echo $month == "12" ? "selected" : ""; ?> value="12">December</option>
+                        </select>
+                        <select style="text-align: center; font-weight: 600;" name="status" required>
+                            <option disabled selected hidden value="">Status</option>
+                            <option <?php echo $status == "present" ? "selected" : ""; ?> value="present">Present</option>
+                            <option <?php echo $status == "absent" ? "selected" : ""; ?> value="absent">Absent</option>
+                        </select>
+                        <select style="text-align: center; font-weight: 600;" name="role" required>
+                            <option disabled selected hidden value="">Role</option>
+                            <option <?php echo $role == "admin" ? "selected" : ""; ?> value="admin">Admin</option>
+                            <option <?php echo $role == "teacher" ? "selected" : ""; ?> value="teacher">Teacher</option>
+                            <option <?php echo $role == "student" ? "selected" : ""; ?> value="student">Student</option>
+                        </select>
+                        <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
+                    </form>
                 </div>
                 <div>
                     <table class="attendance-tb">
