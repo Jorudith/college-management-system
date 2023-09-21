@@ -77,11 +77,23 @@
                     <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
 
                     <div class="capstoneschedule-input">
-                        <label style="font-weight: 650;" for="class">CLASS</label>
-                        <input style="font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="id">ID</label>
+                            <select style="width: 60%;">
+                                <option value="0">Choose ID:</option>
+                                <option value="1">00001</option>
+                            </select>
+                        </div>
 
-                        <label style="font-weight: 650;" for="course">COURSE</label>
-                        <input style="font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="class">CLASS</label>
+                            <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
+                        </div>
+
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="course">COURSE</label>
+                            <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
+                        </div>
                     </div>
                 </form>
             </div>

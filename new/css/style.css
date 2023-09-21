@@ -162,6 +162,7 @@ form {
     border: 2px solid black;
 }
 .capstoneschedule-form {
+    width: 30%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;
