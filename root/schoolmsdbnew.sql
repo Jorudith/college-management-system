@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2023 at 11:24 AM
+-- Generation Time: Sep 21, 2023 at 11:48 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -240,6 +240,13 @@ CREATE TABLE `teacher_courses` (
   `course_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `teacher_courses`
+--
+
+INSERT INTO `teacher_courses` (`id`, `teacherid`, `course_id`) VALUES
+(1, 'teacher 1', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -249,14 +256,14 @@ CREATE TABLE `teacher_courses` (
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `user_tyoe` varchar(255) NOT NULL
+  `user_type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `password`, `user_tyoe`) VALUES
+INSERT INTO `user` (`id`, `password`, `user_type`) VALUES
 (1, 'password123', 'student');
 
 --
@@ -396,7 +403,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `teacher_courses`
 --
 ALTER TABLE `teacher_courses`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
