@@ -9,7 +9,7 @@ json/
 *.json
 
 # Ignore img folder
-img/
+# img/
 
 # Ignore lib folder
 lib/
