@@ -150,7 +150,7 @@ form {
     width: 100%;
     display: flex;
     flex-flow: row nowrap;
-    gap: 2rem;
+    gap: 4rem;
 
     border-bottom: 1px solid black;
 }
@@ -162,7 +162,7 @@ form {
     border: 2px solid black;
 }
 .capstoneschedule-form {
-    width: 30%;
+    width: 40%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;

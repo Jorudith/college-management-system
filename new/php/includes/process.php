@@ -5,8 +5,8 @@ session_start();
 include "dbh.php";
 
 if (isset($_POST["button"]) && $_POST["button"] == "signin") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
     
     $sql = "SELECT * FROM `user` WHERE `username` = '$username';";
     $result = mysqli_query($conn, $sql);

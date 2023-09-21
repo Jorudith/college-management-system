@@ -55,3 +55,7 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 
 # Project Sep 22, 2023 12:15 am
 - Added some php in home.php
+
+# Project Sep 22, 2023, 12:30 am
+- Fixed stuff in process.php
+- Fixed stuff in db as well
