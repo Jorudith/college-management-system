@@ -1,3 +1,6 @@
+<?php
+    session_unset();
+?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -23,7 +26,7 @@
                         <input style="font-size: 1.4rem;" id="password" type="text" name="password" placeholder="Enter password..." required>
                     </div>
 
-                    <button type="submit">SIGN IN</button>
+                    <button type="submit" name="button" value="signin">SIGN IN</button>
                 </form>
                 <div class="signin-logo">
                     <img src="img/URS-Logo.jpg">
