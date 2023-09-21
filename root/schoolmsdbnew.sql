@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2023 at 11:48 AM
+-- Generation Time: Sep 21, 2023 at 02:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `admin_id` int(255) NOT NULL,
+  `id` varchar(7) NOT NULL DEFAULT '0',
   `lname` varchar(255) NOT NULL,
   `fname` varchar(255) NOT NULL,
   `M.I.` varchar(255) NOT NULL,
@@ -49,8 +49,36 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`admin_id`, `lname`, `fname`, `M.I.`, `password`, `phone no.`, `email`, `DOB`, `hiredate`, `street`, `brgy`, `city/municipality`, `province`, `ZIP`, `Sex`) VALUES
-(1, 'Doe', 'John', 'D.', 'password123', 1505625851, 'fovotiy760@recutv.com', '1990-08-01', '2023-09-20', '221B Baker Street', 'Kanluran', 'Naic', 'Cavite', 4110, 'M');
+INSERT INTO `admin` (`id`, `lname`, `fname`, `M.I.`, `password`, `phone no.`, `email`, `DOB`, `hiredate`, `street`, `brgy`, `city/municipality`, `province`, `ZIP`, `Sex`) VALUES
+('AD-001', 'Doe', 'John', 'D.', 'password123', 1505625851, 'fovotiy760@recutv.com', '1990-08-01', '2023-09-20', '221B Baker Street', 'Kanluran', 'Naic', 'Cavite', 4110, 'M');
+
+--
+-- Triggers `admin`
+--
+DELIMITER $$
+CREATE TRIGGER `admin_insert` BEFORE INSERT ON `admin` FOR EACH ROW BEGIN
+  INSERT INTO admin_seq VALUES (NULL);
+  SET NEW.id = CONCAT('AD-', LPAD(LAST_INSERT_ID(), 3, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_seq`
+--
+
+CREATE TABLE `admin_seq` (
+  `id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin_seq`
+--
+
+INSERT INTO `admin_seq` (`id`) VALUES
+(1);
 
 -- --------------------------------------------------------
 
@@ -256,15 +284,16 @@ INSERT INTO `teacher_courses` (`id`, `teacherid`, `course_id`) VALUES
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `user_type` varchar(255) NOT NULL
+  `user_type` varchar(255) NOT NULL,
+  `username` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `password`, `user_type`) VALUES
-(1, 'password123', 'student');
+INSERT INTO `user` (`id`, `password`, `user_type`, `username`) VALUES
+(1, 'password123', 'student', NULL);
 
 --
 -- Indexes for dumped tables
@@ -274,7 +303,13 @@ INSERT INTO `user` (`id`, `password`, `user_type`) VALUES
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`admin_id`);
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `admin_seq`
+--
+ALTER TABLE `admin_seq`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `capstone_sched`
@@ -346,10 +381,10 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT for table `admin_seq`
 --
-ALTER TABLE `admin`
-  MODIFY `admin_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `admin_seq`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `capstone_sched`
