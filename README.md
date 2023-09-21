@@ -48,3 +48,7 @@ TODO: HTML for home.php admin > capstone schedules
 230921 22:55
 DONE: HTML CSS of index.php, HTML CSS of home.php admin > attendance
 TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
+
+# Project Sep 21, 2023 11:29 pm
+- Added some php in home.php and index.php
+- Fixed some stuff in process.php to fit current database

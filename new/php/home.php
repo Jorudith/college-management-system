@@ -1,3 +1,16 @@
+<?php
+    include "includes/dbh.php";
+    session_start();
+
+    $year = $_POST["year"] ?? "";
+    $month = $_POST["month"] ?? "";
+    $status = $_POST["status"] ?? "";
+    $role = $_POST["role"] ?? "";
+
+    // $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
+    // $year_results = mysqli_query($conn, $year_sql);
+    
+?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -14,7 +27,18 @@
             <img src="../img/URS-Logo.jpg" alt="University of Rizal System Logo">
         </div>
         <div style="display: flex; flex-flow: column nowrap; gap: 1rem;">
-            <h1 style="font-size: 2rem; font-weight: 800;">Welcome, Admin.</h1>
+            <h1 style="font-size: 2rem; font-weight: 800;">Welcome, 
+                <?php
+                    $substr = substr($_SESSION["username"], 0, 2);
+                    if ($substr === "ad") {
+                        echo "Admin!";
+                    } else if ($substr === "te") {
+                        echo "Teacher!";
+                    } else if ($substr === "st") {
+                        echo "Student!";
+                    }
+                ?>
+            </h1>
             <div style="display: flex; gap: 0 1em; align-items: flex-end;">
                 <ul class="navigation-ul">
                     <li>Home</li>
@@ -25,7 +49,7 @@
                     <li>Teachers</li>
                     <li>Reports</li>
                 </ul>
-                <h3 style="font-size: 1.4rem; font-weight: 650;">LOGOUT</h3>
+                <h3 style="font-size: 1.4rem; font-weight: 650;"><a href="../index.php">LOGOUT</a></h3>
             </div>
         </div>
     </header>
