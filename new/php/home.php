@@ -165,17 +165,56 @@
                 </form>
             </div>
             <div class="course">
-                <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                    <form style="display: flex; gap: 2rem;">
-                        <select style="text-align: center; font-weight: 600;" name="year" required>
-                            <option>Year</option>
-                        </select>
-                        <select style="text-align: center; font-weight: 600;" name="class" required>
-                                <option>Class</option>
-                        </select>
-                        <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
-                    </form>
+                <div style="width: 100%;">
+                    <table class="capstoneschedule-tb">
+                        <tr>
+                            <th style="font-weight: 650;">ID</th>
+                            <th style="font-weight: 650;">DATE & TIME</th>
+                            <th style="font-weight: 650;">CLASS</th>
+                            <th style="font-weight: 650;">COURSE</th>
+                        </tr>
+                        <tr>
+                            <td>00001</td>
+                            <td>2080 September 30 20:20AM</td>
+                            <td>BSCS 3-3</td>
+                            <td>COSC 880</td>
+                        </tr>
+                    </table>
                 </div>
+                <form class="capstoneschedule-form">
+                    <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+
+                    <div class="capstoneschedule-input">
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="id">ID</label>
+                            <select style="width: 60%;">
+                                <option value="0">Choose ID:</option>
+                                <option value="1">00001</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="date">DATE</label>
+                            <input style="width: 60%;" type="date">
+                        </div>
+
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="class">CLASS</label>
+                            <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
+                        </div>
+
+                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                            <label style="font-weight: 650;" for="course">COURSE</label>
+                            <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
+                        </div>
+
+                        <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                            <button>ADD</button>
+                            <button>EDIT</button>
+                            <button>CANCEL</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </section>
     </main>
