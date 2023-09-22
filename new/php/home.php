@@ -155,8 +155,26 @@
                             <label style="font-weight: 650;" for="course">COURSE</label>
                             <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
                         </div>
-                    </div>
+
+                        <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                            <button>ADD</button>
+                            <button>EDIT</button>
+                            <button>CANCEL</button>
+                        </div>
                 </form>
+            </div>
+            <div class="course">
+                <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
+                    <form style="display: flex; gap: 2rem;">
+                        <select style="text-align: center; font-weight: 600;" name="year" required>
+                            <option>Year</option>
+                        </select>
+                        <select style="text-align: center; font-weight: 600;" name="class" required>
+                                <option>Class</option>
+                        </select>
+                        <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>

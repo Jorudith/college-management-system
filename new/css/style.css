@@ -172,3 +172,13 @@ form {
     flex-flow: column nowrap;
     gap: 0.5rem;
 }
+.course {
+    padding: 2rem 4rem;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 4rem;
+
+    border-bottom: 1px solid black;
+}
