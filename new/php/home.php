@@ -73,31 +73,31 @@
                                     ?>
                                 </select>
                                 <select style="text-align: center; font-weight: 600;" name="month" required>
-                                    <option disabled <?php echo empty($month) ? "selected" : ""; ?> hidden value="">Month</option>
-                                    <option <?php echo $month == "all" ? "selected" : ""; ?> value="all">All months</option>
-                                    <option <?php echo $month == "1" ? "selected" : ""; ?> value="1">January</option>
-                                    <option <?php echo $month == "2" ? "selected" : ""; ?> value="2">February</option>
-                                    <option <?php echo $month == "3" ? "selected" : ""; ?> value="3">March</option>
-                                    <option <?php echo $month == "4" ? "selected" : ""; ?> value="4">April</option>
-                                    <option <?php echo $month == "5" ? "selected" : ""; ?> value="5">May</option>
-                                    <option <?php echo $month == "6" ? "selected" : ""; ?> value="6">June</option>
-                                    <option <?php echo $month == "7" ? "selected" : ""; ?> value="7">July</option>
-                                    <option <?php echo $month == "8" ? "selected" : ""; ?> value="8">August</option>
-                                    <option <?php echo $month == "9" ? "selected" : ""; ?> value="9">September</option>
-                                    <option <?php echo $month == "10" ? "selected" : ""; ?> value="10">October</option>
-                                    <option <?php echo $month == "11" ? "selected" : ""; ?> value="11">November</option>
-                                    <option <?php echo $month == "12" ? "selected" : ""; ?> value="12">December</option>
+                                    <option disabled selected hidden value="">Month</option>
+                                    <option '.($month == "all" ? "selected" : "").' value="all">All months</option>
+                                    <option '.($month == "1" ? "selected" : "").' value="1">January</option>
+                                    <option '.($month == "2" ? "selected" : "").' value="2">February</option>
+                                    <option '.($month == "3" ? "selected" : "").' value="3">March</option>
+                                    <option '.($month == "4" ? "selected" : "").' value="4">April</option>
+                                    <option '.($month == "5" ? "selected" : "").' value="5">May</option>
+                                    <option '.($month == "6" ? "selected" : "").' value="6">June</option>
+                                    <option '.($month == "7" ? "selected" : "").' value="7">July</option>
+                                    <option '.($month == "8" ? "selected" : "").' value="8">August</option>
+                                    <option '.($month == "9" ? "selected" : "").' value="9">September</option>
+                                    <option '.($month == "10" ? "selected" : "").' value="10">October</option>
+                                    <option '.($month == "11" ? "selected" : "").' value="11">November</option>
+                                    <option '.($month == "12" ? "selected" : "").' value="12">December</option>
                                 </select>
                                 <select style="text-align: center; font-weight: 600;" name="status" required>
                                     <option disabled selected hidden value="">Status</option>
-                                    <option <?php echo $status == "present" ? "selected" : ""; ?> value="present">Present</option>
-                                    <option <?php echo $status == "absent" ? "selected" : ""; ?> value="absent">Absent</option>
+                                    <option '.($status == "present" ? "selected" : "").' value="present">Present</option>
+                                    <option '.($status == "absent" ? "selected" : "").' value="absent">Absent</option>
                                 </select>
                                 <select style="text-align: center; font-weight: 600;" name="role" required>
                                     <option disabled selected hidden value="">Role</option>
-                                    <option <?php echo $role == "admin" ? "selected" : ""; ?> value="admin">Admin</option>
-                                    <option <?php echo $role == "teacher" ? "selected" : ""; ?> value="teacher">Teacher</option>
-                                    <option <?php echo $role == "student" ? "selected" : ""; ?> value="student">Student</option>
+                                    <option '.($role == "admin" ? "selected" : "").' value="admin">Admin</option>
+                                    <option '.($role == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
+                                    <option '.($role == "student" ? "selected" : "").' value="student">Student</option>
                                 </select>
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
                             </form>
@@ -195,6 +195,8 @@
                 } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
                     
                 }
+            
+// Nasa taas mga commits ko BORDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
             ?>
                 </form>
             </div>
