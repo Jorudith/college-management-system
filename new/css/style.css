@@ -154,20 +154,20 @@ form {
 
     border-bottom: 1px solid black;
 }
-.capstoneschedule-tb {
+.capstoneschedule-tb, .course-tb {
     width: 100%;
 }
 .capstoneschedule-tb th, td {
     padding: 0 1rem;
     border: 2px solid black;
 }
-.capstoneschedule-form {
+.capstoneschedule-form, .course-form {
     width: 40%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;
 }
-.capstoneschedule-input {
+.capstoneschedule-input, .course-input {
     display: flex;
     flex-flow: column nowrap;
     gap: 0.5rem;
