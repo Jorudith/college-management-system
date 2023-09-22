@@ -161,6 +161,7 @@
                             <button>EDIT</button>
                             <button>CANCEL</button>
                         </div>
+                    </div>
                 </form>
             </div>
             <div class="course">
