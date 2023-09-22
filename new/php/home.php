@@ -40,128 +40,164 @@
                 ?>
             </h1>
             <div style="display: flex; gap: 0 1em; align-items: flex-end;">
-                <ul class="navigation-ul">
-                    <li>Home</li>
-                    <li>Attendance</li>
-                    <li>Capstone Schedules</li>
-                    <li>Courses</li>
-                    <li>Students</li>
-                    <li>Teachers</li>
-                    <li>Reports</li>
-                </ul>
+                <form class="navigation-ul" method="post" action="home.php">
+                    <button type="submit" name="option" value="home">Home</button>
+                    <button type="submit" name="option" value="attendance">Attendance</button>
+                    <button type="submit" name="option" value="capstone">Capstone Schedules</button>
+                    <button type="submit" name="option" value="courses">Courses</button>
+                    <button type="submit" name="option" value="students">Students</button>
+                    <button type="submit" name="option" value="teachers">Teachers</button>
+                    <button type="submit" name="option" value="reports">Reports</button>
+                </form>
                 <h3 style="font-size: 1.4rem; font-weight: 650;"><a href="../index.php">LOGOUT</a></h3>
             </div>
         </div>
     </header>
     <main>
         <section>
-            <div class="attendance">
-                <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                    <form style="display: flex; gap: 2rem;">
-                        <select style="text-align: center; font-weight: 600;" name="year" required>
-                            <option disabled selected hidden value="">Year</option>
-                            <?php
-                                foreach($year_results as $year_result) {
-                                    $curr_year = $year_result["year"];
-                                    echo "<option ".($year == $curr_year ? "selected" : "").">$curr_year</option>";
-                                }
-                            ?>
-                        </select>
-                        <select style="text-align: center; font-weight: 600;" name="month" required>
-                            <option disabled <?php echo empty($month) ? "selected" : ""; ?> hidden value="">Month</option>
-                            <option <?php echo $month == "all" ? "selected" : ""; ?> value="all">All months</option>
-                            <option <?php echo $month == "1" ? "selected" : ""; ?> value="1">January</option>
-                            <option <?php echo $month == "2" ? "selected" : ""; ?> value="2">February</option>
-                            <option <?php echo $month == "3" ? "selected" : ""; ?> value="3">March</option>
-                            <option <?php echo $month == "4" ? "selected" : ""; ?> value="4">April</option>
-                            <option <?php echo $month == "5" ? "selected" : ""; ?> value="5">May</option>
-                            <option <?php echo $month == "6" ? "selected" : ""; ?> value="6">June</option>
-                            <option <?php echo $month == "7" ? "selected" : ""; ?> value="7">July</option>
-                            <option <?php echo $month == "8" ? "selected" : ""; ?> value="8">August</option>
-                            <option <?php echo $month == "9" ? "selected" : ""; ?> value="9">September</option>
-                            <option <?php echo $month == "10" ? "selected" : ""; ?> value="10">October</option>
-                            <option <?php echo $month == "11" ? "selected" : ""; ?> value="11">November</option>
-                            <option <?php echo $month == "12" ? "selected" : ""; ?> value="12">December</option>
-                        </select>
-                        <select style="text-align: center; font-weight: 600;" name="status" required>
-                            <option disabled selected hidden value="">Status</option>
-                            <option <?php echo $status == "present" ? "selected" : ""; ?> value="present">Present</option>
-                            <option <?php echo $status == "absent" ? "selected" : ""; ?> value="absent">Absent</option>
-                        </select>
-                        <select style="text-align: center; font-weight: 600;" name="role" required>
-                            <option disabled selected hidden value="">Role</option>
-                            <option <?php echo $role == "admin" ? "selected" : ""; ?> value="admin">Admin</option>
-                            <option <?php echo $role == "teacher" ? "selected" : ""; ?> value="teacher">Teacher</option>
-                            <option <?php echo $role == "student" ? "selected" : ""; ?> value="student">Student</option>
-                        </select>
-                        <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
-                    </form>
-                </div>
-                <div>
-                    <table class="attendance-tb">
-                        <tr>
-                            <th style="font-weight: 650;">DATE</th>
-                            <th style="width: 15%; font-weight: 650;">STATUS</th>
-                            <th style="width: 60%; font-weight: 650;">NAME</th>
-                        </tr>
-                        <tr>
-                            <td>2023 September 30</td>
-                            <td>Present</td>
-                            <td>John Doe</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="capstoneschedule">
-                <div style="width: 100%;">
-                    <table class="capstoneschedule-tb">
-                        <tr>
-                            <th style="font-weight: 650;">ID</th>
-                            <th style="font-weight: 650;">DATE & TIME</th>
-                            <th style="font-weight: 650;">CLASS</th>
-                            <th style="font-weight: 650;">COURSE</th>
-                        </tr>
-                        <tr>
-                            <td>00001</td>
-                            <td>2080 September 30 20:20AM</td>
-                            <td>BSCS 3-3</td>
-                            <td>COSC 880</td>
-                        </tr>
-                    </table>
-                </div>
-                <form class="capstoneschedule-form">
-                    <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+            <?php
+                if (isset($_POST["option"]) && $_POST["option"] == "home") {
 
-                    <div class="capstoneschedule-input">
-                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                            <label style="font-weight: 650;" for="id">ID</label>
-                            <select style="width: 60%;">
-                                <option value="0">Choose ID:</option>
-                                <option value="1">00001</option>
-                            </select>
+                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                    echo '
+                    <div class="attendance">
+                        <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
+                            <form style="display: flex; gap: 2rem;">
+                                <select style="text-align: center; font-weight: 600;" name="year" required>
+                                    <option disabled selected hidden value="">Year</option>
+                                    <?php
+                                        foreach($year_results as $year_result) {
+                                            $curr_year = $year_result["year"];
+                                            echo "<option ".($year == $curr_year ? "selected" : "").">$curr_year</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <select style="text-align: center; font-weight: 600;" name="month" required>
+                                    <option disabled selected hidden value="">Month</option>
+                                    <option '.($month == "all" ? "selected" : "").' value="all">All months</option>
+                                    <option '.($month == "1" ? "selected" : "").' value="1">January</option>
+                                    <option '.($month == "2" ? "selected" : "").' value="2">February</option>
+                                    <option '.($month == "3" ? "selected" : "").' value="3">March</option>
+                                    <option '.($month == "4" ? "selected" : "").' value="4">April</option>
+                                    <option '.($month == "5" ? "selected" : "").' value="5">May</option>
+                                    <option '.($month == "6" ? "selected" : "").' value="6">June</option>
+                                    <option '.($month == "7" ? "selected" : "").' value="7">July</option>
+                                    <option '.($month == "8" ? "selected" : "").' value="8">August</option>
+                                    <option '.($month == "9" ? "selected" : "").' value="9">September</option>
+                                    <option '.($month == "10" ? "selected" : "").' value="10">October</option>
+                                    <option '.($month == "11" ? "selected" : "").' value="11">November</option>
+                                    <option '.($month == "12" ? "selected" : "").' value="12">December</option>
+                                </select>
+                                <select style="text-align: center; font-weight: 600;" name="status" required>
+                                    <option disabled selected hidden value="">Status</option>
+                                    <option '.($status == "present" ? "selected" : "").' value="present">Present</option>
+                                    <option '.($status == "absent" ? "selected" : "").' value="absent">Absent</option>
+                                </select>
+                                <select style="text-align: center; font-weight: 600;" name="role" required>
+                                    <option disabled selected hidden value="">Role</option>
+                                    <option '.($role == "admin" ? "selected" : "").' value="admin">Admin</option>
+                                    <option '.($role == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
+                                    <option '.($role == "student" ? "selected" : "").' value="student">Student</option>
+                                </select>
+                                <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
+                            </form>
                         </div>
-
-                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                            <label style="font-weight: 650;" for="date">DATE</label>
-                            <input style="width: 60%;" type="date">
-                        </div>
-
-                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                            <label style="font-weight: 650;" for="class">CLASS</label>
-                            <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
-                        </div>
-
-                        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                            <label style="font-weight: 650;" for="course">COURSE</label>
-                            <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
-                        </div>
-
-                        <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
-                            <button>ADD</button>
-                            <button>EDIT</button>
-                            <button>CANCEL</button>
+                        <div>
+                            <table class="attendance-tb">
+                                <tr>
+                                    <th style="font-weight: 650;">DATE</th>
+                                    <th style="width: 15%; font-weight: 650;">STATUS</th>
+                                    <th style="width: 60%; font-weight: 650;">NAME</th>
+                                </tr>
+                                <tr>
+                                    <td>2023 September 30</td>
+                                    <td>Present</td>
+                                    <td>John Doe</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
+                    ';
+                } else if (isset($_POST["option"]) && $_POST["option"] == "capstone") {
+                    echo '
+                    <div class="capstoneschedule">
+                        <div style="width: 100%;">
+                            <table class="capstoneschedule-tb">
+                                <tr>
+                                    <th style="font-weight: 650;">ID</th>
+                                    <th style="font-weight: 650;">DATE & TIME</th>
+                                    <th style="font-weight: 650;">CLASS</th>
+                                    <th style="font-weight: 650;">COURSE</th>
+                                </tr>
+                                <tr>
+                                    <td>00001</td>
+                                    <td>2080 September 30 20:20AM</td>
+                                    <td>BSCS 3-3</td>
+                                    <td>COSC 880</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <form class="capstoneschedule-form">
+                            <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+
+                            <div class="capstoneschedule-input">
+                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                                    <label style="font-weight: 650;" for="id">ID</label>
+                                    <select style="width: 60%;">
+                                        <option value="0">Choose ID:</option>
+                                        <option value="1">00001</option>
+                                    </select>
+                                </div>
+
+                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                                    <label style="font-weight: 650;" for="date">DATE</label>
+                                    <input style="width: 60%;" type="date">
+                                </div>
+
+                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                                    <label style="font-weight: 650;" for="class">CLASS</label>
+                                    <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
+                                </div>
+
+                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
+                                    <label style="font-weight: 650;" for="course">COURSE</label>
+                                    <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
+                                </div>
+
+                                <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                                    <button>ADD</button>
+                                    <button>EDIT</button>
+                                    <button>CANCEL</button>
+                                </div>
+                        </form>
+                    </div>
+                    ';
+                } else if (isset($_POST["option"]) && $_POST["option"] == "course") {
+                    echo '
+                    <div class="course">
+                        <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
+                            <form style="display: flex; gap: 2rem;">
+                                <select style="text-align: center; font-weight: 600;" name="year" required>
+                                    <option>Year</option>
+                                </select>
+                                <select style="text-align: center; font-weight: 600;" name="class" required>
+                                        <option>Class</option>
+                                </select>
+                                <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
+                            </form>
+                        </div>
+                    </div>
+                    ';
+                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                    
+                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                    
+                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                    
+                }
+            
+// Nasa taas mga commits ko BORDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+            ?>
                 </form>
             </div>
             <div class="course">
