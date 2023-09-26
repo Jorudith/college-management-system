@@ -39,7 +39,7 @@
                     }
                 ?>
             </h1>
-            <div style="display: flex; gap: 0 1em; align-items: flex-end;">
+            <div style="display: flex; gap: 0 1em; align-items: center;">
                 <form class="navigation-ul" method="post" action="home.php">
                     <button type="submit" name="option" value="home">Home</button>
                     <button type="submit" name="option" value="attendance">Attendance</button>
@@ -60,10 +60,10 @@
 
                 } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
                     echo '
-                    <div class="attendance">
+                    <div class="ms attendance">
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                            <form style="display: flex; gap: 2rem;">
-                                <select style="text-align: center; font-weight: 600;" name="year" required>
+                            <form class="attendance-ul">
+                                <select name="year" required>
                                     <option disabled selected hidden value="">Year</option>
                                     <?php
                                         foreach($year_results as $year_result) {
@@ -72,7 +72,7 @@
                                         }
                                     ?>
                                 </select>
-                                <select style="text-align: center; font-weight: 600;" name="month" required>
+                                <select name="month" required>
                                     <option disabled selected hidden value="">Month</option>
                                     <option '.($month == "all" ? "selected" : "").' value="all">All months</option>
                                     <option '.($month == "1" ? "selected" : "").' value="1">January</option>
@@ -88,12 +88,12 @@
                                     <option '.($month == "11" ? "selected" : "").' value="11">November</option>
                                     <option '.($month == "12" ? "selected" : "").' value="12">December</option>
                                 </select>
-                                <select style="text-align: center; font-weight: 600;" name="status" required>
+                                <select name="status" required>
                                     <option disabled selected hidden value="">Status</option>
                                     <option '.($status == "present" ? "selected" : "").' value="present">Present</option>
                                     <option '.($status == "absent" ? "selected" : "").' value="absent">Absent</option>
                                 </select>
-                                <select style="text-align: center; font-weight: 600;" name="role" required>
+                                <select name="role" required>
                                     <option disabled selected hidden value="">Role</option>
                                     <option '.($role == "admin" ? "selected" : "").' value="admin">Admin</option>
                                     <option '.($role == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
@@ -102,66 +102,74 @@
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
                             </form>
                         </div>
-                        <div>
-                            <table class="attendance-tb">
-                                <tr>
-                                    <th style="font-weight: 650;">DATE</th>
-                                    <th style="width: 15%; font-weight: 650;">STATUS</th>
-                                    <th style="width: 60%; font-weight: 650;">NAME</th>
-                                </tr>
-                                <tr>
-                                    <td>2023 September 30</td>
-                                    <td>Present</td>
-                                    <td>John Doe</td>
-                                </tr>
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>DATE</th>
+                                        <th>STATUS</th>
+                                        <th>NAME</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023 September 30</td>
+                                        <td>Present</td>
+                                        <td>John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe </td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                     ';
                 } else if (isset($_POST["option"]) && $_POST["option"] == "capstone") {
                     echo '
-                    <div class="capstoneschedule">
-                        <div style="width: 100%;">
-                            <table class="capstoneschedule-tb">
-                                <tr>
-                                    <th style="font-weight: 650;">ID</th>
-                                    <th style="font-weight: 650;">DATE & TIME</th>
-                                    <th style="font-weight: 650;">CLASS</th>
-                                    <th style="font-weight: 650;">COURSE</th>
-                                </tr>
-                                <tr>
-                                    <td>00001</td>
-                                    <td>2080 September 30 20:20AM</td>
-                                    <td>BSCS 3-3</td>
-                                    <td>COSC 880</td>
-                                </tr>
+                    <div class="ms capstoneschedule">
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>DATE & TIME</th>
+                                        <th>CLASS</th>
+                                        <th>COURSE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>00001</td>
+                                        <td>2080 September 30 20:20AM</td>
+                                        <td>BSCS 3-3</td>
+                                        <td>COSC 880</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <form class="capstoneschedule-form">
                             <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
 
                             <div class="capstoneschedule-input">
-                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                    <label style="font-weight: 650;" for="id">ID</label>
-                                    <select style="width: 60%;">
+                                <div class="il">
+                                    <label for="id">ID</label>
+                                    <select>
                                         <option value="0">Choose ID:</option>
                                         <option value="1">00001</option>
                                     </select>
                                 </div>
 
-                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                    <label style="font-weight: 650;" for="date">DATE</label>
-                                    <input style="width: 60%;" type="date">
+                                <div class="il">
+                                    <label for="date">DATE</label>
+                                    <input type="date">
                                 </div>
 
-                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                    <label style="font-weight: 650;" for="class">CLASS</label>
-                                    <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter class..." required>
+                                <div class="il">
+                                    <label for="class">CLASS</label>
+                                    <input id="class" type="text" name="class" placeholder="Enter class..." required>
                                 </div>
 
-                                <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                    <label style="font-weight: 650;" for="course">COURSE</label>
-                                    <input style="width: 60%; font-size: 1.4rem;" id="course" type="text" name="course" placeholder="Enter course..." required>
+                                <div class="il">
+                                    <label for="course">COURSE</label>
+                                    <input id="course" type="text" name="course" placeholder="Enter course..." required>
                                 </div>
 
                                 <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
@@ -169,59 +177,126 @@
                                     <button>EDIT</button>
                                     <button>CANCEL</button>
                                 </div>
+                            </div>
                         </form>
                     </div>
                     ';
                 } else if (isset($_POST["option"]) && $_POST["option"] == "course") {
                     echo '
-                    <div class="course">
-                        <div style="width: 100%;">
-                        <table class="course-tb">
-                            <tr>
-                                <th style="font-weight: 650;">ID</th>
-                                <th style="font-weight: 650;">COURSE CODE</th>
-                                <th style="font-weight: 650;">COURSE NAME</th>
-                            </tr>
-                            <tr>
-                                <td>00001</td>
-                                <td>GNED 01</td>
-                                <td>Art Appreciation</td>
-                            </tr>
-                        </table>
+                    <div class="ms course">
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>COURSE CODE</th>
+                                        <th>COURSE NAME</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>00001</td>
+                                        <td>GNED 01</td>
+                                        <td>Art Appreciation</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <form class="course-form">
-                        <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
-    
-                        <div class="course-input">
-                            <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                <label style="font-weight: 650;" for="id">ID</label>
-                                <select style="width: 60%;">
-                                    <option value="0">Choose ID:</option>
-                                    <option value="1">00001</option>
-                                </select>
+                            <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+
+                            <div class="course-input">
+                                <div class="il">
+                                    <label for="id">ID</label>
+                                    <select>
+                                        <option value="0">Choose ID:</option>
+                                        <option value="1">00001</option>
+                                    </select>
+                                </div>
+        
+                                <div class="il">
+                                    <label style="width: 10%"  for="date">COURSE CODE</label>
+                                    <input id="class" type="text" name="class" placeholder="Enter course code..." required>
+                                </div>
+        
+                                <div class="il">
+                                    <label style="width: 10%" for="class">COURSE NAME</label>
+                                    <input id="class" type="text" name="class" placeholder="Enter course name..." required>
+                                </div>
+        
+                                <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                                    <button>ADD</button>
+                                    <button>EDIT</button>
+                                    <button>CANCEL</button>
+                                </div>
                             </div>
-    
-                            <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                <label style="font-weight: 650;" for="date">COURSE CODE</label>
-                                <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter course code..." required>
-                            </div>
-    
-                            <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 2rem;">
-                                <label style="font-weight: 650;" for="class">COURSE NAME</label>
-                                <input style="width: 60%; font-size: 1.4rem;" id="class" type="text" name="class" placeholder="Enter course name..." required>
-                            </div>
-    
-                            <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
-                                <button>ADD</button>
-                                <button>EDIT</button>
-                                <button>CANCEL</button>
-                            </div>
-                        </div>
                         </form>
                     </div>
                     ';
-                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
-                    
+                } else if (isset($_POST["option"]) && $_POST["option"] == "student") {
+                    echo '
+                    <div class="ms student">
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>PROGRAM</th>
+                                        <th>CLASS</th>
+                                        <th>FULL NAME</th>
+                                        <th>AGE</th>
+                                        <th>SEX</th>
+                                        <th>BIRTH DATE</th>
+                                        <th>CONTACT NUMBER</th>
+                                        <td>EMAIL ADDRESS</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>00001</td>
+                                        <td>BSCS</td>
+                                        <td>YEAR 2 - CLASS 1</td>
+                                        <td>Jane Doe</td>
+                                        <td>21</td>
+                                        <td>FEMALE</td>
+                                        <td>2002-09-29</td>
+                                        <td>09091231234</td>
+                                        <td>jane.doe@urs.edu.ph</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <form class="student-form">
+                            <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+
+                            <div class="student-input">
+                                <div class="il">
+                                    <label for="id">ID</label>
+                                    <select>
+                                        <option value="0">Choose ID:</option>
+                                        <option value="1">00001</option>
+                                    </select>
+                                </div>
+        
+                                <div class="il">
+                                    <label style="width: 10%"  for="date">COURSE CODE</label>
+                                    <input id="class" type="text" name="class" placeholder="Enter course code..." required>
+                                </div>
+        
+                                <div class="il">
+                                    <label style="width: 10%" for="class">COURSE NAME</label>
+                                    <input id="class" type="text" name="class" placeholder="Enter course name..." required>
+                                </div>
+        
+                                <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                                    <button>ADD</button>
+                                    <button>EDIT</button>
+                                    <button>CANCEL</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    ';
                 } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
                     
                 } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
@@ -230,7 +305,6 @@
             
 // Nasa taas mga commits ko BORDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
             ?>
-
         </section>
     </main>
 </body>
