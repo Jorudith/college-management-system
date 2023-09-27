@@ -279,13 +279,57 @@
                                 </div>
         
                                 <div class="il">
-                                    <label style="width: 10%"  for="date">COURSE CODE</label>
-                                    <input id="class" type="text" name="class" placeholder="Enter course code..." required>
+                                    <label for="program">PROGRAM</label>
+                                    <select>
+                                        <option value="0">Choose program:</option>
+                                        <option value="BSCS">Bachelor of Science in Computer Science (BSCS)</option>
+                                    </select>
                                 </div>
         
                                 <div class="il">
-                                    <label style="width: 10%" for="class">COURSE NAME</label>
-                                    <input id="class" type="text" name="class" placeholder="Enter course name..." required>
+                                    <label style="width: 10%" for="fullname">FULL NAME</label>
+                                    <input id="fullname" type="text" name="fullname" placeholder="Enter full name..." required>
+                                </div>
+                                
+                                <div class="il">
+                                    <label for="age">AGE</label>
+                                    <select>
+                                        <option value="0">Select age:</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="sex">SEX</label>
+                                    <select>
+                                        <option value="0">Select sex:</option>
+                                        <option value="MALE">MALE</option>
+                                        <option value="FEMALE">FEMALE</option>
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="birthdate">BIRTH DATE</label>
+                                    <input type="date">
+                                </div>
+
+                                <div class="il">
+                                    <label style="width: 10%" for="contactnumber">CONTACT NUMBER</label>
+                                    <input id="contactnumber" type="text" name="contactnumber" placeholder="+639" required>
+                                </div>
+
+                                <div class="il">
+                                    <label style="width: 10%" for="emailaddress">EMAIL ADDRESS</label>
+                                    <input id="emailaddress" type="text" name="emailaddress" placeholder="@urs.edu.ph" required>
                                 </div>
         
                                 <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
