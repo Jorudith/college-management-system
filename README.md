@@ -72,3 +72,7 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 # Project Sep 30, 2023 9:23 pm
 - Made attendance dynamic and buttons/filters work
 - Added new database for practicing
+
+# Project Oct 1, 2023 1:59 pm
+- Fixed some issues in home.php
+- Attendance fully functional

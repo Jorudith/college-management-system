@@ -114,6 +114,7 @@
     // Display of attendances
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -215,19 +216,19 @@
                                 </select>
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
                                 ';
-                                if (isset($_POST["submit"])) {
+                                if (isset($_POST["submit"]) || isset($_POST["new_val"])) {
                                     echo '
-                                    <button type="submit" name="submit" value="absent">Absent All</button>
-                                    <button type="submit" name="submit" value="present">Present All</button>
-                                    <button type="submit" name="submit" value="null">No Classes</button>
+                                    <button type="submit" name="submit" value="absentAll">Absent All</button>
+                                    <button type="submit" name="submit" value="presentAll">Present All</button>
+                                    <button type="submit" name="submit" value="nullAll">No Classes</button>
                                     ';
-                                    if ($_POST["submit"] == "absent") {
+                                    if (isset($_POST["submit"]) && $_POST["submit"] == "absentAll") {
                                         $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $absentSql);
-                                    } else if ($_POST["submit"] == "present") {
+                                    } else if (isset($_POST["submit"]) && $_POST["submit"] == "presentAll") {
                                         $presentSql = "UPDATE `attendance` SET `status` = 'present' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $presentSql);
-                                    } else if ($_POST["submit"] == "null") {
+                                    } else if (isset($_POST["submit"]) && $_POST["submit"] == "nullAll") {
                                         $nullSql = "UPDATE `attendance` SET `status` = NULL WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $nullSql);
                                     }
@@ -246,9 +247,21 @@
                                 </thead>
                                 <tbody>
                                     ';
-                                    if (isset($_POST["submit"])) {
-                                        $displayAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                    if (isset($_POST["submit"]) || isset($_POST["new_val"])) {
+                                        if (isset($_POST["new_val"]) && $_POST["new_val"] == "NULL") {
+                                            $updateSql = "UPDATE `attendance` SET `status` = NULL WHERE `id` = ".$_POST["id"]."";
+                                            mysqli_query($conn, $updateSql);
+                                        } else if (isset($_POST["new_val"]) && $_POST["new_val"] == "absent") {
+                                            $updateSql = "UPDATE `attendance` SET `status` = 'absent' WHERE `id` = ".$_POST["id"]."";
+                                            mysqli_query($conn, $updateSql);
+                                        } else if (isset($_POST["new_val"]) && $_POST["new_val"] == "present") {
+                                            $updateSql = "UPDATE `attendance` SET `status` = 'present' WHERE `id` = ".$_POST["id"]."";
+                                            mysqli_query($conn, $updateSql);
+                                        }
+
+                                        $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+
                                         if (mysqli_num_rows($displayAttendanceResults) != 0) {
                                             foreach($displayAttendanceResults as $displayAttendanceResult) {
                                                 switch (substr($displayAttendanceResult["date"], 5, 2)) {
@@ -295,7 +308,23 @@
                                                 echo '
                                                 <tr>
                                                     <td>'.substr($displayAttendanceResult["date"], 0, 4).' '.$displayMonth.' '.substr($displayAttendanceResult["date"], 8, 2).'</td>
-                                                    <td>'.(($_SESSION["status"] == "NULL") ? "No Class" : ucwords($_SESSION["status"])).'</td>
+                                                    <td>
+                                                        <form action="home.php" method="post">
+                                                            <input hidden name="id" value="'.$displayAttendanceResult["attendance_id"].'">
+                                                            <select name="new_val" onchange="submit()">
+                                                                <option selected value="'.$displayAttendanceResult["status"].'">'.(($_SESSION["status"] == "NULL") ? "No Class" : ucwords($displayAttendanceResult["status"])).'</option>
+                                                                '; 
+                                                                $statuses = array("NULL", "present", "absent");
+                                                                unset($statuses[array_search($displayAttendanceResult["status"], $statuses)]);
+                                                                foreach($statuses as $option) {
+                                                                    echo '
+                                                                    <option value="'.$option.'">'.(($option == "NULL") ? "No Class" : ucwords($option)).'</option>
+                                                                    ';
+                                                                }                                                       
+                                                                echo '
+                                                            </select>
+                                                        </form>
+                                                    </td>
                                                     <td>'.$displayAttendanceResult["f_name"] . ' ' . $displayAttendanceResult["l_name"].'</td>
                                                 </tr>
                                                 ';
@@ -534,7 +563,7 @@
                         </form>
                     </div>
                     ';
-                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "report") {
                     
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     
