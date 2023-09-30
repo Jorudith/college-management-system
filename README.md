@@ -68,3 +68,7 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 - Fixed commit issues
 - Fixed selection issues in attendance
 - Added border for my commits and other commits
+
+# Project Sep 30, 2023 9:23 pm
+- Made attendance dynamic and buttons/filters work
+- Added new database for practicing

@@ -1,15 +1,118 @@
 <?php
     include "includes/dbh.php";
     session_start();
+    $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "";
+    // unsets selection when moving to different 
+    if ($_SESSION["option"] != "attendance") {
+        unset($_SESSION["year"]);
+        unset($_SESSION["month"]);
+        unset($_SESSION["day"]);
+        unset($_SESSION["status"]);
+        unset($_SESSION["role"]);
+    }
 
-    $year = $_POST["year"] ?? "";
-    $month = $_POST["month"] ?? "";
-    $status = $_POST["status"] ?? "";
-    $role = $_POST["role"] ?? "";
+    $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
+    $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
+    $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
+    $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
+    $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
 
-    // $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
-    // $year_results = mysqli_query($conn, $year_sql);
+    $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
+    $year_results = mysqli_query($conn, $year_sql);
+    $day_sql = "SELECT DISTINCT day(`date`) `day` FROM `attendance` ORDER BY DAY(`date`);";
+    $day_results = mysqli_query($conn, $day_sql);
     
+    // Patching up previous attendances of people (admin, teacher, student)
+    $adminSql = "SELECT * FROM `admin`;";
+    $teacherSql = "SELECT * FROM `teacher`;";
+    $studentSql = "SELECT * FROM `student`;";
+
+    $adminResults = mysqli_query($conn, $adminSql);
+    $teacherResults = mysqli_query($conn, $teacherSql);
+    $studentResults = mysqli_query($conn, $studentSql);
+    
+    // Attendance check for admins
+    foreach($adminResults as $adminResult) {
+        $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$adminResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
+        if ($currAttendanceDate == date("Y-m-d")) {
+            
+        } else {
+            if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                $currDate = new DateTime($adminResult["hire_date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                    $attendanceInsertSql."<br>";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+            } else if (isset($currAttendanceDate["date"])) {
+                $currDate = new DateTime($currAttendanceDate["date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+                
+            }
+        }
+    }
+    // Attendance check for teachers
+    foreach($teacherResults as $teacherResult) {
+        $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `teacher` ON `attendance`.`attendee_id` = `teacher`.`id` WHERE `attendance`.`attendee_id` = '".$teacherResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
+
+        if ($currAttendanceDate == date("Y-m-d")) {
+            
+        } else {
+            if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                $currDate = new DateTime($teacherResult["hire_date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+            } else if (isset($currAttendanceDate["date"])) {
+                $currDate = new DateTime($currAttendanceDate["date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+            }
+        }
+    }
+    // Attendance check for students
+    foreach($studentResults as $studentResult) {
+        $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `student` ON `attendance`.`attendee_id` = `student`.`id` WHERE `attendance`.`attendee_id` = '".$studentResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
+
+        if ($currAttendanceDate == date("Y-m-d")) {
+            
+        } else {
+            if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                $currDate = new DateTime($studentResult["admission_date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+            } else if (isset($currAttendanceDate["date"])) {
+                $currDate = new DateTime($currAttendanceDate["date"]);
+                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                    $currDate->modify("+1 day");
+                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                    mysqli_query($conn, $attendanceInsertSql);
+                }
+            }
+        }
+    }
+
+    // Display of attendances
+
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -56,50 +159,80 @@
     <main>
         <section>
             <?php
-                if (isset($_POST["option"]) && $_POST["option"] == "home") {
+                if (isset($_SESSION["option"]) && $_SESSION["option"] == "home") {
 
-                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
-                    echo '
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
+                echo '
                     <div class="ms attendance">
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                            <form class="attendance-ul">
+                            <form class="attendance-ul" action="home.php" method="post">
                                 <select name="year" required>
                                     <option disabled selected hidden value="">Year</option>
-                                    <?php
+                                    ';
                                         foreach($year_results as $year_result) {
                                             $curr_year = $year_result["year"];
-                                            echo "<option ".($year == $curr_year ? "selected" : "").">$curr_year</option>";
+                                            echo "<option ".($_SESSION["year"] == $curr_year ? "selected" : "").">$curr_year</option>";
                                         }
-                                    ?>
+                            echo '
                                 </select>
                                 <select name="month" required>
                                     <option disabled selected hidden value="">Month</option>
-                                    <option '.($month == "all" ? "selected" : "").' value="all">All months</option>
-                                    <option '.($month == "1" ? "selected" : "").' value="1">January</option>
-                                    <option '.($month == "2" ? "selected" : "").' value="2">February</option>
-                                    <option '.($month == "3" ? "selected" : "").' value="3">March</option>
-                                    <option '.($month == "4" ? "selected" : "").' value="4">April</option>
-                                    <option '.($month == "5" ? "selected" : "").' value="5">May</option>
-                                    <option '.($month == "6" ? "selected" : "").' value="6">June</option>
-                                    <option '.($month == "7" ? "selected" : "").' value="7">July</option>
-                                    <option '.($month == "8" ? "selected" : "").' value="8">August</option>
-                                    <option '.($month == "9" ? "selected" : "").' value="9">September</option>
-                                    <option '.($month == "10" ? "selected" : "").' value="10">October</option>
-                                    <option '.($month == "11" ? "selected" : "").' value="11">November</option>
-                                    <option '.($month == "12" ? "selected" : "").' value="12">December</option>
+                                    <option '.($_SESSION["month"] == "this" ? "selected" : "").' value="'.date("m").'">This Month</option>
+                                    <option '.($_SESSION["month"] == "01" ? "selected" : "").' value="01">January</option>
+                                    <option '.($_SESSION["month"] == "02" ? "selected" : "").' value="02">February</option>
+                                    <option '.($_SESSION["month"] == "03" ? "selected" : "").' value="03">March</option>
+                                    <option '.($_SESSION["month"] == "04" ? "selected" : "").' value="04">April</option>
+                                    <option '.($_SESSION["month"] == "05" ? "selected" : "").' value="05">May</option>
+                                    <option '.($_SESSION["month"] == "06" ? "selected" : "").' value="06">June</option>
+                                    <option '.($_SESSION["month"] == "07" ? "selected" : "").' value="07">July</option>
+                                    <option '.($_SESSION["month"] == "08" ? "selected" : "").' value="08">August</option>
+                                    <option '.($_SESSION["month"] == "09" ? "selected" : "").' value="09">September</option>
+                                    <option '.($_SESSION["month"] == "10" ? "selected" : "").' value="10">October</option>
+                                    <option '.($_SESSION["month"] == "11" ? "selected" : "").' value="11">November</option>
+                                    <option '.($_SESSION["month"] == "12" ? "selected" : "").' value="12">December</option>
+                                </select>
+                                <select name="day" required>
+                                    <option disabled selected hidden value="">Day</option>
+                                    <option '.($_SESSION["day"] == "today" ? "selected" : "").' value="'.date("d").'">Today</option>
+                                    ';
+                                    foreach($day_results as $day_result) {
+                                        $curr_day = $day_result["day"];
+                                        echo "<option ".($_SESSION["day"] == $curr_day ? "selected" : "").">$curr_day</option>";
+                                    }
+                                    echo '
                                 </select>
                                 <select name="status" required>
                                     <option disabled selected hidden value="">Status</option>
-                                    <option '.($status == "present" ? "selected" : "").' value="present">Present</option>
-                                    <option '.($status == "absent" ? "selected" : "").' value="absent">Absent</option>
+                                    <option '.($_SESSION["status"] == "present" ? "selected" : "").' value="present">Present</option>
+                                    <option '.($_SESSION["status"] == "absent" ? "selected" : "").' value="absent">Absent</option>
+                                    <option '.($_SESSION["status"] == "NULL" ? "selected" : "").' value="NULL">No Class</option>
                                 </select>
                                 <select name="role" required>
                                     <option disabled selected hidden value="">Role</option>
-                                    <option '.($role == "admin" ? "selected" : "").' value="admin">Admin</option>
-                                    <option '.($role == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
-                                    <option '.($role == "student" ? "selected" : "").' value="student">Student</option>
+                                    <option '.($_SESSION["role"] == "admin" ? "selected" : "").' value="admin">Admin</option>
+                                    <option '.($_SESSION["role"] == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
+                                    <option '.($_SESSION["role"] == "student" ? "selected" : "").' value="student">Student</option>
                                 </select>
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
+                                ';
+                                if (isset($_POST["submit"])) {
+                                    echo '
+                                    <button type="submit" name="submit" value="absent">Absent All</button>
+                                    <button type="submit" name="submit" value="present">Present All</button>
+                                    <button type="submit" name="submit" value="null">No Classes</button>
+                                    ';
+                                    if ($_POST["submit"] == "absent") {
+                                        $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        mysqli_query($conn, $absentSql);
+                                    } else if ($_POST["submit"] == "present") {
+                                        $presentSql = "UPDATE `attendance` SET `status` = 'present' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        mysqli_query($conn, $presentSql);
+                                    } else if ($_POST["submit"] == "null") {
+                                        $nullSql = "UPDATE `attendance` SET `status` = NULL WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        mysqli_query($conn, $nullSql);
+                                    }
+                                }  
+                                echo '
                             </form>
                         </div>
                         <div style="width: 100%; overflow: auto;">
@@ -112,17 +245,77 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>2023 September 30</td>
-                                        <td>Present</td>
-                                        <td>John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe </td>
-                                    </tr>
+                                    ';
+                                    if (isset($_POST["submit"])) {
+                                        $displayAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                        if (mysqli_num_rows($displayAttendanceResults) != 0) {
+                                            foreach($displayAttendanceResults as $displayAttendanceResult) {
+                                                switch (substr($displayAttendanceResult["date"], 5, 2)) {
+                                                    case "01":
+                                                        $displayMonth = "Januray";
+                                                        break;
+                                                    case "02":
+                                                        $displayMonth = "February";
+                                                        break;
+                                                    case "03":
+                                                        $displayMonth = "March";
+                                                        break;
+                                                    case "04":
+                                                        $displayMonth = "April";
+                                                        break;
+                                                    case "05":
+                                                        $displayMonth = "May";
+                                                        break;
+                                                    case "06":
+                                                        $displayMonth = "June";
+                                                        break;
+                                                    case "07":
+                                                        $displayMonth = "July";
+                                                        break;
+                                                    case "08":
+                                                        $displayMonth = "August";
+                                                        break;
+                                                    case "09":
+                                                        $displayMonth = "September";
+                                                        break;
+                                                    case "10":
+                                                        $displayMonth = "October";
+                                                        break;
+                                                    case "11":
+                                                        $displayMonth = "November";
+                                                        break;
+                                                    case "12":
+                                                        $displayMonth = "December";
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                                
+                                                echo '
+                                                <tr>
+                                                    <td>'.substr($displayAttendanceResult["date"], 0, 4).' '.$displayMonth.' '.substr($displayAttendanceResult["date"], 8, 2).'</td>
+                                                    <td>'.(($_SESSION["status"] == "NULL") ? "No Class" : ucwords($_SESSION["status"])).'</td>
+                                                    <td>'.$displayAttendanceResult["f_name"] . ' ' . $displayAttendanceResult["l_name"].'</td>
+                                                </tr>
+                                                ';
+                                            }
+                                        
+                                        } else {
+                                            echo '
+                                            <tr>
+                                                <td colspan="3">No Records!</td>
+                                            </tr>
+                                            ';
+                                        }
+                                    }
+                                    echo '
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     ';
-                } else if (isset($_POST["option"]) && $_POST["option"] == "capstone") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "capstone") {
                     echo '
                     <div class="ms capstoneschedule">
                         <div style="width: 100%; overflow: auto;">
@@ -181,7 +374,7 @@
                         </form>
                     </div>
                     ';
-                } else if (isset($_POST["option"]) && $_POST["option"] == "course") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "course") {
                     echo '
                     <div class="ms course">
                         <div style="width: 100%; overflow: auto;">
@@ -233,7 +426,7 @@
                         </form>
                     </div>
                     ';
-                } else if (isset($_POST["option"]) && $_POST["option"] == "student") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "student") {
                     echo '
                     <div class="ms student">
                         <div style="width: 100%; overflow: auto;">
@@ -341,9 +534,9 @@
                         </form>
                     </div>
                     ';
-                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     
-                } else if (isset($_POST["option"]) && $_POST["option"] == "attendance") {
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     
                 }
             
