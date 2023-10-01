@@ -17,6 +17,14 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         exit();
     } else {
         $_SESSION["username"] = $username;
+        $substr = substr($_SESSION["username"], 0, 2);
+        if ($substr === "ad") {
+            $_SESSION["type"] = "admin";
+        } else if ($substr === "te") {
+            $_SESSION["type"] = "teacher";
+        } else if ($substr === "st") {
+            $_SESSION["type"] = "student";
+        }
         header("Location: ../home.php?");
         exit();
     }

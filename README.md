@@ -76,3 +76,9 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 # Project Oct 1, 2023 1:59 pm
 - Fixed some issues in home.php
 - Attendance fully functional
+
+# TODO: fix student and teacher can't be able to change there status and their role's status
+
+# Project Oct 1, 2023 9:44 pm
+- Fully functional attendance
+- Features fixed and attendance management aligned to roles (limited access based on roles)

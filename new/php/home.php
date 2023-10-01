@@ -133,14 +133,7 @@
         <div style="display: flex; flex-flow: column nowrap; gap: 1rem;">
             <h1 style="font-size: 2rem; font-weight: 800;">Welcome, 
                 <?php
-                    $substr = substr($_SESSION["username"], 0, 2);
-                    if ($substr === "ad") {
-                        echo "Admin!";
-                    } else if ($substr === "te") {
-                        echo "Teacher!";
-                    } else if ($substr === "st") {
-                        echo "Student!";
-                    }
+                    echo ucwords($_SESSION["type"]). "!";
                 ?>
             </h1>
             <div style="display: flex; gap: 0 1em; align-items: center;">
@@ -163,7 +156,7 @@
                 if (isset($_SESSION["option"]) && $_SESSION["option"] == "home") {
 
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
-                echo '
+                    echo '
                     <div class="ms attendance">
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
                             <form class="attendance-ul" action="home.php" method="post">
@@ -194,7 +187,7 @@
                                 </select>
                                 <select name="day" required>
                                     <option disabled selected hidden value="">Day</option>
-                                    <option '.($_SESSION["day"] == "today" ? "selected" : "").' value="'.date("d").'">Today</option>
+                                    <option '.($_SESSION["day"] == "today" ? "selected" : "").' value="'.date("d").'">This day</option>
                                     ';
                                     foreach($day_results as $day_result) {
                                         $curr_day = $day_result["day"];
@@ -210,26 +203,42 @@
                                 </select>
                                 <select name="role" required>
                                     <option disabled selected hidden value="">Role</option>
-                                    <option '.($_SESSION["role"] == "admin" ? "selected" : "").' value="admin">Admin</option>
-                                    <option '.($_SESSION["role"] == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
-                                    <option '.($_SESSION["role"] == "student" ? "selected" : "").' value="student">Student</option>
+                                    '; 
+                                    if ($_SESSION["type"] == "admin") {
+                                        echo '
+                                            <option '.($_SESSION["role"] == "admin" ? "selected" : "").' value="admin">Admin</option>
+                                            <option '.($_SESSION["role"] == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
+                                            <option '.($_SESSION["role"] == "student" ? "selected" : "").' value="student">Student</option>
+                                        ';
+                                    } else if ($_SESSION["type"] == "teacher") {
+                                        echo '
+                                            <option '.($_SESSION["role"] == "teacher" ? "selected" : "").' value="teacher">Teacher</option>
+                                            <option '.($_SESSION["role"] == "student" ? "selected" : "").' value="student">Student</option>
+                                        ';
+                                    } else if ($_SESSION["type"] == "student") {
+                                        echo '
+                                            <option '.($_SESSION["role"] == "student" ? "selected" : "").' value="student">Student</option>
+                                        ';
+                                    }
+                                    
+                                echo '
                                 </select>
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
                                 ';
-                                if (isset($_POST["submit"]) || isset($_POST["new_val"])) {
+                                if ((isset($_POST["submit"]) || isset($_POST["new_val"])) && $_SESSION["type"] != "student") {
                                     echo '
                                     <button type="submit" name="submit" value="absentAll">Absent All</button>
                                     <button type="submit" name="submit" value="presentAll">Present All</button>
                                     <button type="submit" name="submit" value="nullAll">No Classes</button>
                                     ';
                                     if (isset($_POST["submit"]) && $_POST["submit"] == "absentAll") {
-                                        $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`role` = '".$_SESSION["role"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $absentSql);
                                     } else if (isset($_POST["submit"]) && $_POST["submit"] == "presentAll") {
-                                        $presentSql = "UPDATE `attendance` SET `status` = 'present' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        $presentSql = "UPDATE `attendance` SET `status` = 'present' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`role` = '".$_SESSION["role"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $presentSql);
                                     } else if (isset($_POST["submit"]) && $_POST["submit"] == "nullAll") {
-                                        $nullSql = "UPDATE `attendance` SET `status` = NULL WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                        $nullSql = "UPDATE `attendance` SET `status` = NULL WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`role` = '".$_SESSION["role"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $nullSql);
                                     }
                                 }  
@@ -259,8 +268,24 @@
                                             mysqli_query($conn, $updateSql);
                                         }
 
-                                        $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
-                                        $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                        if ($_SESSION["type"] == "admin") {
+                                            $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                            $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                        } else if ($_SESSION["type"] == "teacher") {
+                                            if ($_SESSION["role"] == "student") {
+                                                $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                                $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                            } else if ($_SESSION["role"] == "teacher") {
+                                                $displayAttendanceSql = "SELECT `attendance`.`attendee_id` `attendee_id`, `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendee_id` = '".$_SESSION["username"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                                $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                            }
+                                            
+                                        } else if ($_SESSION["type"] == "student") {
+                                            $displayAttendanceSql = "SELECT `attendance`.`attendee_id` `attendee_id`, `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendee_id` = '".$_SESSION["username"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                                $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                        }
+
+                                        
 
                                         if (mysqli_num_rows($displayAttendanceResults) != 0) {
                                             foreach($displayAttendanceResults as $displayAttendanceResult) {
@@ -308,7 +333,10 @@
                                                 echo '
                                                 <tr>
                                                     <td>'.substr($displayAttendanceResult["date"], 0, 4).' '.$displayMonth.' '.substr($displayAttendanceResult["date"], 8, 2).'</td>
-                                                    <td>
+                                                    <td>';
+
+                                                    if ($_SESSION["type"] == "admin") {
+                                                        echo'
                                                         <form action="home.php" method="post">
                                                             <input hidden name="id" value="'.$displayAttendanceResult["attendance_id"].'">
                                                             <select name="new_val" onchange="submit()">
@@ -324,6 +352,34 @@
                                                                 echo '
                                                             </select>
                                                         </form>
+                                                        ';
+                                                    } else if ($_SESSION["type"] == "teacher") {
+                                                        if ($_SESSION["role"] == "teacher") {
+                                                            echo (($_SESSION["status"] == "NULL") ? "No Class" : ucwords($displayAttendanceResult["status"]));
+                                                        } else if ($_SESSION["role"] == "student") {
+                                                            echo'
+                                                            <form action="home.php" method="post">
+                                                                <input hidden name="id" value="'.$displayAttendanceResult["attendance_id"].'">
+                                                                <select name="new_val" onchange="submit()">
+                                                                    <option selected value="'.$displayAttendanceResult["status"].'">'.(($_SESSION["status"] == "NULL") ? "No Class" : ucwords($displayAttendanceResult["status"])).'</option>
+                                                                    '; 
+                                                                    $statuses = array("NULL", "present", "absent");
+                                                                    unset($statuses[array_search($displayAttendanceResult["status"], $statuses)]);
+                                                                    foreach($statuses as $option) {
+                                                                        echo '
+                                                                        <option value="'.$option.'">'.(($option == "NULL") ? "No Class" : ucwords($option)).'</option>
+                                                                        ';
+                                                                    }                                                       
+                                                                    echo '
+                                                                </select>
+                                                            </form>
+                                                            ';
+                                                        } 
+                                                    } else if ($_SESSION["type"] == "student") {
+                                                        echo (($_SESSION["status"] == "NULL") ? "No Class" : ucwords($displayAttendanceResult["status"]));
+                                                    }
+                                                    
+                                                        echo'
                                                     </td>
                                                     <td>'.$displayAttendanceResult["f_name"] . ' ' . $displayAttendanceResult["l_name"].'</td>
                                                 </tr>
