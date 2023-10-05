@@ -82,3 +82,6 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 # Project Oct 1, 2023 9:44 pm
 - Fully functional attendance
 - Features fixed and attendance management aligned to roles (limited access based on roles)
+
+# Project Oct 5, 2023 6:50 pm
+- Fixed bugs in fully functional attendance

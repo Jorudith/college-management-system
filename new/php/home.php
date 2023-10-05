@@ -225,7 +225,7 @@
                                 </select>
                                 <button type="submit" name="submit" value="submit">SEE ATTENDANCE</button>
                                 ';
-                                if ((isset($_POST["submit"]) || isset($_POST["new_val"])) && $_SESSION["type"] != "student") {
+                                if ((isset($_POST["submit"]) || isset($_POST["new_val"])) && $_SESSION["type"] != "student" && !(($_SESSION["type"] == "teacher") && ($_SESSION["role"] == "teacher"))) {
                                     echo '
                                     <button type="submit" name="submit" value="absentAll">Absent All</button>
                                     <button type="submit" name="submit" value="presentAll">Present All</button>
