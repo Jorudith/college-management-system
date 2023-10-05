@@ -1,5 +1,6 @@
 <?php
     include "includes/dbh.php";
+    include "funcs/interpreters.php";
     session_start();
     $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "";
     // unsets selection when moving to different 
@@ -289,47 +290,7 @@
 
                                         if (mysqli_num_rows($displayAttendanceResults) != 0) {
                                             foreach($displayAttendanceResults as $displayAttendanceResult) {
-                                                switch (substr($displayAttendanceResult["date"], 5, 2)) {
-                                                    case "01":
-                                                        $displayMonth = "Januray";
-                                                        break;
-                                                    case "02":
-                                                        $displayMonth = "February";
-                                                        break;
-                                                    case "03":
-                                                        $displayMonth = "March";
-                                                        break;
-                                                    case "04":
-                                                        $displayMonth = "April";
-                                                        break;
-                                                    case "05":
-                                                        $displayMonth = "May";
-                                                        break;
-                                                    case "06":
-                                                        $displayMonth = "June";
-                                                        break;
-                                                    case "07":
-                                                        $displayMonth = "July";
-                                                        break;
-                                                    case "08":
-                                                        $displayMonth = "August";
-                                                        break;
-                                                    case "09":
-                                                        $displayMonth = "September";
-                                                        break;
-                                                    case "10":
-                                                        $displayMonth = "October";
-                                                        break;
-                                                    case "11":
-                                                        $displayMonth = "November";
-                                                        break;
-                                                    case "12":
-                                                        $displayMonth = "December";
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                                
+                                                $displayMonth = month_interpreter($displayAttendanceResult["date"], 5, 2);
                                                 echo '
                                                 <tr>
                                                     <td>'.substr($displayAttendanceResult["date"], 0, 4).' '.$displayMonth.' '.substr($displayAttendanceResult["date"], 8, 2).'</td>
@@ -401,6 +362,8 @@
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "capstone") {
+                    $capstoneSchedSql = "SELECT `capstone_sched`.`id` `id`, YEAR(`capstone_sched`.`date`) `year`, MONTH(`capstone_sched`.`date`) `month`, DAY(`capstone_sched`.`date`) `day`, `capstone_sched`.`time` `time`, CONCAT(`class`.`program`, ' ', `class`.`year`, '-', `class`.`section`) `class_class`, `course`.`code` `course_code` FROM `capstone_sched` INNER JOIN `course` ON `capstone_sched`.`course_id` = `course`.`id` INNER JOIN `class` ON `capstone_sched`.`class_id` = `class`.`id`;";
+                    $capstoneSchedResults = mysqli_query($conn, $capstoneSchedSql);
                     echo '
                     <div class="ms capstoneschedule">
                         <div style="width: 100%; overflow: auto;">
@@ -414,6 +377,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                    ';
+
+                                    foreach($capstoneSchedResults as $CSR) {
+                                        echo '
+                                        <td>'.$CSR["id"].'</td>
+                                        <td>'.$CSR["year"]." ".month_interpreter($CSR["month"], 0, 2)." ".$CSR["day"]." | ".to_standard_time($CSR["time"]).'</td>
+                                        <td>'.$CSR["class_class"].'</td>
+                                        <td>'.$CSR["course_code"].'</td>
+                                        ';
+                                    }
+
+                                    echo'
                                     <tr>
                                         <td>00001</td>
                                         <td>2080 September 30 20:20AM</td>
