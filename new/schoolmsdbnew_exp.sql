@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2023 at 03:37 PM
+-- Generation Time: Oct 06, 2023 at 03:49 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -541,7 +541,7 @@ CREATE TABLE `student` (
   `l_name` varchar(255) NOT NULL,
   `f_name` varchar(255) NOT NULL,
   `m_initial` varchar(2) NOT NULL,
-  `phone_no` int(13) NOT NULL,
+  `phone_no` varchar(13) NOT NULL,
   `email` varchar(255) NOT NULL,
   `dob` date NOT NULL,
   `admission_date` date NOT NULL,
@@ -559,7 +559,12 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `l_name`, `f_name`, `m_initial`, `phone_no`, `email`, `dob`, `admission_date`, `street`, `brgy`, `city_municipality`, `province`, `zip`, `sex`, `user_id`) VALUES
-('ST-001', 'Doe', 'John', 'X', 1505625851, 'missingme@urs.edu.ph', '1983-09-04', '2023-09-01', 'random street', 'Bronx ', 'New York City', 'New York', 6969, 'M', 2);
+('ST-001', 'Doe', 'John', 'X', '1505625851', 'missingme@urs.edu.ph', '1983-09-04', '2023-09-01', 'random street', 'Bronx ', 'New York City', 'New York', 6969, 'M', 2),
+('ST-007', 'Belmont', 'Trevor', 'B', '321523535', 'random3mail@gmail.com', '1993-10-01', '2023-10-01', 'J.Riz', 'west', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
+('ST-008', 'Tepes', 'Adrian', 'L', '1111111111', 'random13mail@gmail.com', '1973-10-09', '2023-10-05', 'Capt C. Nazareno', 'South', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
+('ST-009', 'Belnades', 'Sypha', 'A', '1111111345', 'random13mail!2@gmail.com', '1980-10-14', '2023-10-06', 'Gomez ', 'North', 'Targoviste', 'Dâmbovița', 245, 'F', 0),
+('ST-010', 'Tepes', 'Vladimir', 'D', '1111321345', 'Castlevania13mail!2@gmail.com', '1820-11-23', '2023-10-06', 'Burgos ', 'North West', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
+('ST-011', 'Báthory ', 'Erzsebet ', 'W', '1119876345', 'GarfieDCat@gmail.com', '1850-12-30', '2023-10-10', 'Zamora ', 'South West', 'Alexandria', 'Alexandria', 2031, 'M', 0);
 
 --
 -- Triggers `student`
@@ -606,7 +611,12 @@ CREATE TABLE `student_seq` (
 --
 
 INSERT INTO `student_seq` (`id`) VALUES
-(1);
+(1),
+(7),
+(8),
+(9),
+(10),
+(11);
 
 -- --------------------------------------------------------
 
@@ -893,7 +903,7 @@ ALTER TABLE `student_courses`
 -- AUTO_INCREMENT for table `student_seq`
 --
 ALTER TABLE `student_seq`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `teacher_courses`
