@@ -155,7 +155,18 @@
         <section>
             <?php
                 if (isset($_SESSION["option"]) && $_SESSION["option"] == "home") {
-
+                    echo '
+                    <div class="ms home">
+                        <div class="profile-picture" style="width: 13rem;">
+                            <img src="../img/profile-default.png" style="border-radius: 50%;">
+                        </div>
+                        <div class="profile-information" style="display: flex; flex-flow: column nowrap; justify-content: center;">
+                            <h1 style="font-size: 3.2rem; font-weight: 750;">Jane Jean D. Doe</h1>
+                            <p style="font-size: 2.2rem;">Student Number: 121201211</p>
+                            <p style="font-size: 2.2rem;">BSCS Year 3 Section 1</p>
+                        </div>
+                    </div>
+                    ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     echo '
                     <div class="ms attendance">

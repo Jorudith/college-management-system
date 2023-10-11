@@ -86,7 +86,11 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 # Project Oct 5, 2023 6:50 pm
 - Fixed bugs in fully functional attendance
 
-# Project Oct 5, 20203 11:14 pm
+# Project Oct 5, 2023 11:14 pm
 - new funcs folder ing php. for functions (month_interpreter, to_standard_time)
 - Started and almost finished on capstone sched viewing (might or not change id)
 - TODO: edit,add in capstone
+
+231011 21:10
+DONE: HTML CSS of home.php admin > home (profile)
+TODO: HTML CSS of home.php admin > teachers, HTML CSS of home.php admin > reports
