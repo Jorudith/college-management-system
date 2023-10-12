@@ -94,3 +94,7 @@ TODO: Fixing PHP of index.php and  PHP of home.php admin > attendance
 231011 21:10
 DONE: HTML CSS of home.php admin > home (profile)
 TODO: HTML CSS of home.php admin > teachers, HTML CSS of home.php admin > reports
+
+231012 21:10
+DONE: HTML CSS of home.php admin > teachers
+TODO: HTML CSS of home.php admin > reports

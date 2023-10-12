@@ -606,9 +606,105 @@
                         </form>
                     </div>
                     ';
+                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "teacher") {
+                    echo '
+                    <div class="ms teacher">
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>CLASS</th>
+                                        <th>FULL NAME</th>
+                                        <th>AGE</th>
+                                        <th>SEX</th>
+                                        <th>BIRTH DATE</th>
+                                        <th>CONTACT NUMBER</th>
+                                        <td>EMAIL ADDRESS</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>00001</td>
+                                        <td>YEAR 2 - CLASS 1</td>
+                                        <td>Jane Doe</td>
+                                        <td>21</td>
+                                        <td>FEMALE</td>
+                                        <td>2002-09-29</td>
+                                        <td>09091231234</td>
+                                        <td>jane.doe@urs.edu.ph</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <form class="teacher-form">
+                            <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+
+                            <div class="teacher-input">
+                                <div class="il">
+                                    <label for="id">ID</label>
+                                    <select>
+                                        <option value="0">Choose ID:</option>
+                                        <option value="1">00001</option>
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label style="width: 10%" for="fullname">FULL NAME</label>
+                                    <input id="fullname" type="text" name="fullname" placeholder="Enter full name..." required>
+                                </div>
+
+                                <div class="il">
+                                    <label for="age">AGE</label>
+                                    <select>
+                                        <option value="0">Select age:</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="sex">SEX</label>
+                                    <select>
+                                        <option value="0">Select sex:</option>
+                                        <option value="MALE">MALE</option>
+                                        <option value="FEMALE">FEMALE</option>
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="birthdate">BIRTH DATE</label>
+                                    <input type="date">
+                                </div>
+
+                                <div class="il">
+                                    <label style="width: 10%" for="contactnumber">CONTACT NUMBER</label>
+                                    <input id="contactnumber" type="text" name="contactnumber" placeholder="+639" required>
+                                </div>
+
+                                <div class="il">
+                                    <label style="width: 10%" for="emailaddress">EMAIL ADDRESS</label>
+                                    <input id="emailaddress" type="text" name="emailaddress" placeholder="@urs.edu.ph" required>
+                                </div>
+
+                                <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                                    <button>ADD</button>
+                                    <button>EDIT</button>
+                                    <button>CANCEL</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "report") {
-                    
-                } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     
                 }
             

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2023 at 03:49 PM
+-- Generation Time: Oct 12, 2023 at 02:51 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -255,7 +255,7 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (140, '2023-09-27', 'TE-001', 'teacher', NULL),
 (141, '2023-09-28', 'TE-001', 'teacher', NULL),
 (142, '2023-09-29', 'TE-001', 'teacher', NULL),
-(143, '2023-09-30', 'TE-001', '', 'present'),
+(143, '2023-09-30', 'TE-001', '', NULL),
 (144, '2023-09-02', 'TE-002', 'teacher', NULL),
 (145, '2023-09-03', 'TE-002', 'teacher', NULL),
 (146, '2023-09-04', 'TE-002', 'teacher', NULL),
@@ -284,7 +284,7 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (169, '2023-09-27', 'TE-002', 'teacher', NULL),
 (170, '2023-09-28', 'TE-002', 'teacher', NULL),
 (171, '2023-09-29', 'TE-002', 'teacher', NULL),
-(172, '2023-09-30', 'TE-002', '', 'present'),
+(172, '2023-09-30', 'TE-002', '', 'absent'),
 (173, '2023-09-02', 'TE-003', 'teacher', NULL),
 (174, '2023-09-03', 'TE-003', 'teacher', NULL),
 (175, '2023-09-04', 'TE-003', 'teacher', NULL),
@@ -313,7 +313,7 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (198, '2023-09-27', 'TE-003', 'teacher', NULL),
 (199, '2023-09-28', 'TE-003', 'teacher', NULL),
 (200, '2023-09-29', 'TE-003', 'teacher', NULL),
-(201, '2023-09-30', 'TE-003', '', 'present'),
+(201, '2023-09-30', 'TE-003', '', 'absent'),
 (202, '2023-09-02', 'TE-004', 'teacher', NULL),
 (203, '2023-09-03', 'TE-004', 'teacher', NULL),
 (204, '2023-09-04', 'TE-004', 'teacher', NULL),
@@ -342,7 +342,7 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (227, '2023-09-27', 'TE-004', 'teacher', NULL),
 (228, '2023-09-28', 'TE-004', 'teacher', NULL),
 (229, '2023-09-29', 'TE-004', 'teacher', NULL),
-(230, '2023-09-30', 'TE-004', '', 'present'),
+(230, '2023-09-30', 'TE-004', '', NULL),
 (231, '2023-09-02', 'TE-005', 'teacher', NULL),
 (232, '2023-09-03', 'TE-005', 'teacher', NULL),
 (233, '2023-09-04', 'TE-005', 'teacher', NULL),
@@ -393,7 +393,7 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (278, '2023-09-27', 'TE-006', 'teacher', NULL),
 (279, '2023-09-28', 'TE-006', 'teacher', NULL),
 (280, '2023-09-29', 'TE-006', 'teacher', NULL),
-(281, '2023-09-30', 'TE-006', '', 'present'),
+(281, '2023-09-30', 'TE-006', '', NULL),
 (282, '2023-09-02', 'ST-001', 'student', NULL),
 (283, '2023-09-03', 'ST-001', 'student', NULL),
 (284, '2023-09-04', 'ST-001', 'student', NULL),
@@ -422,7 +422,172 @@ INSERT INTO `attendance` (`id`, `date`, `attendee_id`, `role`, `status`) VALUES
 (307, '2023-09-27', 'ST-001', 'student', NULL),
 (308, '2023-09-28', 'ST-001', 'student', NULL),
 (309, '2023-09-29', 'ST-001', 'student', NULL),
-(310, '2023-09-30', 'ST-001', '', 'present');
+(310, '2023-09-30', 'ST-001', '', 'present'),
+(311, '2023-10-01', 'AD-001', 'admin', 'absent'),
+(312, '2023-10-01', 'AD-002', 'admin', 'absent'),
+(313, '2023-10-01', 'AD-003', 'admin', 'absent'),
+(314, '2023-10-01', 'AD-004', 'admin', 'present'),
+(315, '2023-10-01', 'AD-005', 'admin', 'absent'),
+(316, '2023-10-01', 'AD-006', 'admin', 'absent'),
+(317, '2023-10-01', 'AD-007', 'admin', 'absent'),
+(318, '2023-10-01', 'AD-008', 'admin', 'absent'),
+(319, '2023-10-01', 'TE-001', 'teacher', 'present'),
+(320, '2023-10-01', 'TE-002', 'teacher', NULL),
+(321, '2023-10-01', 'TE-003', 'teacher', 'present'),
+(322, '2023-10-01', 'TE-004', 'teacher', NULL),
+(323, '2023-10-01', 'TE-005', 'teacher', NULL),
+(324, '2023-10-01', 'TE-006', 'teacher', 'present'),
+(325, '2023-10-01', 'ST-001', 'student', 'present'),
+(326, '2023-10-02', 'AD-001', 'admin', NULL),
+(327, '2023-10-03', 'AD-001', 'admin', NULL),
+(328, '2023-10-04', 'AD-001', 'admin', NULL),
+(329, '2023-10-05', 'AD-001', 'admin', NULL),
+(330, '2023-10-02', 'AD-002', 'admin', NULL),
+(331, '2023-10-03', 'AD-002', 'admin', NULL),
+(332, '2023-10-04', 'AD-002', 'admin', NULL),
+(333, '2023-10-05', 'AD-002', 'admin', NULL),
+(334, '2023-10-02', 'AD-003', 'admin', NULL),
+(335, '2023-10-03', 'AD-003', 'admin', NULL),
+(336, '2023-10-04', 'AD-003', 'admin', NULL),
+(337, '2023-10-05', 'AD-003', 'admin', NULL),
+(338, '2023-10-02', 'AD-004', 'admin', NULL),
+(339, '2023-10-03', 'AD-004', 'admin', NULL),
+(340, '2023-10-04', 'AD-004', 'admin', NULL),
+(341, '2023-10-05', 'AD-004', 'admin', NULL),
+(342, '2023-10-02', 'AD-005', 'admin', NULL),
+(343, '2023-10-03', 'AD-005', 'admin', NULL),
+(344, '2023-10-04', 'AD-005', 'admin', NULL),
+(345, '2023-10-05', 'AD-005', 'admin', NULL),
+(346, '2023-10-02', 'AD-006', 'admin', NULL),
+(347, '2023-10-03', 'AD-006', 'admin', NULL),
+(348, '2023-10-04', 'AD-006', 'admin', NULL),
+(349, '2023-10-05', 'AD-006', 'admin', NULL),
+(350, '2023-10-02', 'AD-007', 'admin', NULL),
+(351, '2023-10-03', 'AD-007', 'admin', NULL),
+(352, '2023-10-04', 'AD-007', 'admin', NULL),
+(353, '2023-10-05', 'AD-007', 'admin', NULL),
+(354, '2023-10-02', 'AD-008', 'admin', NULL),
+(355, '2023-10-03', 'AD-008', 'admin', NULL),
+(356, '2023-10-04', 'AD-008', 'admin', NULL),
+(357, '2023-10-05', 'AD-008', 'admin', NULL),
+(358, '2023-10-02', 'TE-001', 'teacher', NULL),
+(359, '2023-10-03', 'TE-001', 'teacher', NULL),
+(360, '2023-10-04', 'TE-001', 'teacher', NULL),
+(361, '2023-10-05', 'TE-001', 'teacher', 'absent'),
+(362, '2023-10-02', 'TE-002', 'teacher', NULL),
+(363, '2023-10-03', 'TE-002', 'teacher', NULL),
+(364, '2023-10-04', 'TE-002', 'teacher', NULL),
+(365, '2023-10-05', 'TE-002', 'teacher', 'absent'),
+(366, '2023-10-02', 'TE-003', 'teacher', NULL),
+(367, '2023-10-03', 'TE-003', 'teacher', NULL),
+(368, '2023-10-04', 'TE-003', 'teacher', NULL),
+(369, '2023-10-05', 'TE-003', 'teacher', 'absent'),
+(370, '2023-10-02', 'TE-004', 'teacher', NULL),
+(371, '2023-10-03', 'TE-004', 'teacher', NULL),
+(372, '2023-10-04', 'TE-004', 'teacher', NULL),
+(373, '2023-10-05', 'TE-004', 'teacher', 'absent'),
+(374, '2023-10-02', 'TE-005', 'teacher', NULL),
+(375, '2023-10-03', 'TE-005', 'teacher', NULL),
+(376, '2023-10-04', 'TE-005', 'teacher', NULL),
+(377, '2023-10-05', 'TE-005', 'teacher', 'absent'),
+(378, '2023-10-02', 'TE-006', 'teacher', NULL),
+(379, '2023-10-03', 'TE-006', 'teacher', NULL),
+(380, '2023-10-04', 'TE-006', 'teacher', NULL),
+(381, '2023-10-05', 'TE-006', 'teacher', 'absent'),
+(382, '2023-10-02', 'ST-001', 'student', NULL),
+(383, '2023-10-03', 'ST-001', 'student', NULL),
+(384, '2023-10-04', 'ST-001', 'student', NULL),
+(385, '2023-10-05', 'ST-001', 'student', NULL),
+(386, '2023-10-06', 'AD-001', 'admin', NULL),
+(387, '2023-10-07', 'AD-001', 'admin', NULL),
+(388, '2023-10-08', 'AD-001', 'admin', NULL),
+(389, '2023-10-09', 'AD-001', 'admin', NULL),
+(390, '2023-10-10', 'AD-001', 'admin', NULL),
+(391, '2023-10-11', 'AD-001', 'admin', NULL),
+(392, '2023-10-06', 'AD-002', 'admin', NULL),
+(393, '2023-10-07', 'AD-002', 'admin', NULL),
+(394, '2023-10-08', 'AD-002', 'admin', NULL),
+(395, '2023-10-09', 'AD-002', 'admin', NULL),
+(396, '2023-10-10', 'AD-002', 'admin', NULL),
+(397, '2023-10-11', 'AD-002', 'admin', NULL),
+(398, '2023-10-06', 'AD-003', 'admin', NULL),
+(399, '2023-10-07', 'AD-003', 'admin', NULL),
+(400, '2023-10-08', 'AD-003', 'admin', NULL),
+(401, '2023-10-09', 'AD-003', 'admin', NULL),
+(402, '2023-10-10', 'AD-003', 'admin', NULL),
+(403, '2023-10-11', 'AD-003', 'admin', NULL),
+(404, '2023-10-06', 'AD-004', 'admin', NULL),
+(405, '2023-10-07', 'AD-004', 'admin', NULL),
+(406, '2023-10-08', 'AD-004', 'admin', NULL),
+(407, '2023-10-09', 'AD-004', 'admin', NULL),
+(408, '2023-10-10', 'AD-004', 'admin', NULL),
+(409, '2023-10-11', 'AD-004', 'admin', NULL),
+(410, '2023-10-06', 'AD-005', 'admin', NULL),
+(411, '2023-10-07', 'AD-005', 'admin', NULL),
+(412, '2023-10-08', 'AD-005', 'admin', NULL),
+(413, '2023-10-09', 'AD-005', 'admin', NULL),
+(414, '2023-10-10', 'AD-005', 'admin', NULL),
+(415, '2023-10-11', 'AD-005', 'admin', NULL),
+(416, '2023-10-06', 'AD-006', 'admin', NULL),
+(417, '2023-10-07', 'AD-006', 'admin', NULL),
+(418, '2023-10-08', 'AD-006', 'admin', NULL),
+(419, '2023-10-09', 'AD-006', 'admin', NULL),
+(420, '2023-10-10', 'AD-006', 'admin', NULL),
+(421, '2023-10-11', 'AD-006', 'admin', NULL),
+(422, '2023-10-06', 'AD-007', 'admin', NULL),
+(423, '2023-10-07', 'AD-007', 'admin', NULL),
+(424, '2023-10-08', 'AD-007', 'admin', NULL),
+(425, '2023-10-09', 'AD-007', 'admin', NULL),
+(426, '2023-10-10', 'AD-007', 'admin', NULL),
+(427, '2023-10-11', 'AD-007', 'admin', NULL),
+(428, '2023-10-06', 'AD-008', 'admin', NULL),
+(429, '2023-10-07', 'AD-008', 'admin', NULL),
+(430, '2023-10-08', 'AD-008', 'admin', NULL),
+(431, '2023-10-09', 'AD-008', 'admin', NULL),
+(432, '2023-10-10', 'AD-008', 'admin', NULL),
+(433, '2023-10-11', 'AD-008', 'admin', NULL),
+(434, '2023-10-06', 'TE-001', 'teacher', NULL),
+(435, '2023-10-07', 'TE-001', 'teacher', NULL),
+(436, '2023-10-08', 'TE-001', 'teacher', NULL),
+(437, '2023-10-09', 'TE-001', 'teacher', NULL),
+(438, '2023-10-10', 'TE-001', 'teacher', NULL),
+(439, '2023-10-11', 'TE-001', 'teacher', NULL),
+(440, '2023-10-06', 'TE-002', 'teacher', NULL),
+(441, '2023-10-07', 'TE-002', 'teacher', NULL),
+(442, '2023-10-08', 'TE-002', 'teacher', NULL),
+(443, '2023-10-09', 'TE-002', 'teacher', NULL),
+(444, '2023-10-10', 'TE-002', 'teacher', NULL),
+(445, '2023-10-11', 'TE-002', 'teacher', NULL),
+(446, '2023-10-06', 'TE-003', 'teacher', NULL),
+(447, '2023-10-07', 'TE-003', 'teacher', NULL),
+(448, '2023-10-08', 'TE-003', 'teacher', NULL),
+(449, '2023-10-09', 'TE-003', 'teacher', NULL),
+(450, '2023-10-10', 'TE-003', 'teacher', NULL),
+(451, '2023-10-11', 'TE-003', 'teacher', NULL),
+(452, '2023-10-06', 'TE-004', 'teacher', NULL),
+(453, '2023-10-07', 'TE-004', 'teacher', NULL),
+(454, '2023-10-08', 'TE-004', 'teacher', NULL),
+(455, '2023-10-09', 'TE-004', 'teacher', NULL),
+(456, '2023-10-10', 'TE-004', 'teacher', NULL),
+(457, '2023-10-11', 'TE-004', 'teacher', NULL),
+(458, '2023-10-06', 'TE-005', 'teacher', NULL),
+(459, '2023-10-07', 'TE-005', 'teacher', NULL),
+(460, '2023-10-08', 'TE-005', 'teacher', NULL),
+(461, '2023-10-09', 'TE-005', 'teacher', NULL),
+(462, '2023-10-10', 'TE-005', 'teacher', NULL),
+(463, '2023-10-11', 'TE-005', 'teacher', NULL),
+(464, '2023-10-06', 'TE-006', 'teacher', NULL),
+(465, '2023-10-07', 'TE-006', 'teacher', NULL),
+(466, '2023-10-08', 'TE-006', 'teacher', NULL),
+(467, '2023-10-09', 'TE-006', 'teacher', NULL),
+(468, '2023-10-10', 'TE-006', 'teacher', NULL),
+(469, '2023-10-11', 'TE-006', 'teacher', NULL),
+(470, '2023-10-06', 'ST-001', 'student', NULL),
+(471, '2023-10-07', 'ST-001', 'student', NULL),
+(472, '2023-10-08', 'ST-001', 'student', NULL),
+(473, '2023-10-09', 'ST-001', 'student', NULL),
+(474, '2023-10-10', 'ST-001', 'student', NULL),
+(475, '2023-10-11', 'ST-001', 'student', NULL);
 
 -- --------------------------------------------------------
 
@@ -453,22 +618,35 @@ INSERT INTO `capstone_sched` (`id`, `date`, `time`, `course_id`, `class_id`) VAL
 
 CREATE TABLE `class` (
   `id` int(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `program` varchar(255) NOT NULL,
   `room` varchar(255) NOT NULL,
-  `section` varchar(255) NOT NULL
+  `section` int(255) NOT NULL,
+  `year` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `class`
 --
 
-INSERT INTO `class` (`id`, `name`, `room`, `section`) VALUES
-(1, 'BSCS', '101', 'A'),
-(2, 'BSCS', '102', 'A'),
-(3, 'BSABE', '201', 'A'),
-(4, 'BSABE', '202', 'B'),
-(5, 'BSIT', '301', 'A'),
-(6, 'BSIT', '302', 'B');
+INSERT INTO `class` (`id`, `program`, `room`, `section`, `year`) VALUES
+(1, 'BSCS', '101', 1, 1),
+(2, 'BSCS', '102', 2, 1),
+(3, 'BSABE', '201', 1, 1),
+(4, 'BSABE', '202', 2, 1),
+(5, 'BSIT', '301', 1, 1),
+(6, 'BSIT', '302', 2, 1),
+(7, 'BSCS', '103', 1, 2),
+(8, 'BSCS', '104', 2, 2),
+(9, 'BSCS', '105', 1, 3),
+(10, 'BSCS', '106', 2, 3),
+(11, 'BSCS', '107', 1, 4),
+(12, 'BSCS', '108', 2, 4),
+(13, 'BSIT', '203', 1, 2),
+(14, 'BSIT', '204', 2, 2),
+(15, 'BSIT', '205', 1, 3),
+(16, 'BSIT', '206', 2, 3),
+(17, 'BSIT', '207', 1, 4),
+(18, 'BSCS', '208', 2, 4);
 
 -- --------------------------------------------------------
 
@@ -487,11 +665,11 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`id`, `code`, `name`) VALUES
-(1, 'Math 03', 'linear algebra'),
-(2, 'DCIT-26', 'Application Development and Visual Computing'),
-(3, 'DCIT-65', 'Social and Professional Issues'),
-(4, 'COSC75', 'Software Engineering II'),
-(5, 'COSC85', 'Networks and Communication');
+(1, 'MATH 03', 'linear algebra'),
+(2, 'DCIT 26', 'Application Development and Visual Computing'),
+(3, 'DCIT 65', 'Social and Professional Issues'),
+(4, 'COSC 75', 'Software Engineering II'),
+(5, 'COSC 85', 'Networks and Communication');
 
 -- --------------------------------------------------------
 
@@ -541,7 +719,7 @@ CREATE TABLE `student` (
   `l_name` varchar(255) NOT NULL,
   `f_name` varchar(255) NOT NULL,
   `m_initial` varchar(2) NOT NULL,
-  `phone_no` varchar(13) NOT NULL,
+  `phone_no` int(13) NOT NULL,
   `email` varchar(255) NOT NULL,
   `dob` date NOT NULL,
   `admission_date` date NOT NULL,
@@ -559,12 +737,7 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `l_name`, `f_name`, `m_initial`, `phone_no`, `email`, `dob`, `admission_date`, `street`, `brgy`, `city_municipality`, `province`, `zip`, `sex`, `user_id`) VALUES
-('ST-001', 'Doe', 'John', 'X', '1505625851', 'missingme@urs.edu.ph', '1983-09-04', '2023-09-01', 'random street', 'Bronx ', 'New York City', 'New York', 6969, 'M', 2),
-('ST-007', 'Belmont', 'Trevor', 'B', '321523535', 'random3mail@gmail.com', '1993-10-01', '2023-10-01', 'J.Riz', 'west', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
-('ST-008', 'Tepes', 'Adrian', 'L', '1111111111', 'random13mail@gmail.com', '1973-10-09', '2023-10-05', 'Capt C. Nazareno', 'South', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
-('ST-009', 'Belnades', 'Sypha', 'A', '1111111345', 'random13mail!2@gmail.com', '1980-10-14', '2023-10-06', 'Gomez ', 'North', 'Targoviste', 'Dâmbovița', 245, 'F', 0),
-('ST-010', 'Tepes', 'Vladimir', 'D', '1111321345', 'Castlevania13mail!2@gmail.com', '1820-11-23', '2023-10-06', 'Burgos ', 'North West', 'Targoviste', 'Dâmbovița', 245, 'M', 0),
-('ST-011', 'Báthory ', 'Erzsebet ', 'W', '1119876345', 'GarfieDCat@gmail.com', '1850-12-30', '2023-10-10', 'Zamora ', 'South West', 'Alexandria', 'Alexandria', 2031, 'M', 0);
+('ST-001', 'Doe', 'John', 'X', 1505625851, 'missingme@urs.edu.ph', '1983-09-04', '2023-09-01', 'random street', 'Bronx ', 'New York City', 'New York', 6969, 'M', 2);
 
 --
 -- Triggers `student`
@@ -611,12 +784,7 @@ CREATE TABLE `student_seq` (
 --
 
 INSERT INTO `student_seq` (`id`) VALUES
-(1),
-(7),
-(8),
-(9),
-(10),
-(11);
+(1);
 
 -- --------------------------------------------------------
 
@@ -778,7 +946,8 @@ ALTER TABLE `capstone_sched`
 -- Indexes for table `class`
 --
 ALTER TABLE `class`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `room` (`room`);
 
 --
 -- Indexes for table `course`
@@ -861,7 +1030,7 @@ ALTER TABLE `admin_seq`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=311;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
 
 --
 -- AUTO_INCREMENT for table `capstone_sched`
@@ -873,7 +1042,7 @@ ALTER TABLE `capstone_sched`
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `course`
@@ -903,7 +1072,7 @@ ALTER TABLE `student_courses`
 -- AUTO_INCREMENT for table `student_seq`
 --
 ALTER TABLE `student_seq`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `teacher_courses`

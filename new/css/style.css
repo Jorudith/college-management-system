@@ -161,7 +161,7 @@ label {
     flex-flow: column nowrap;
     gap: 2rem;
 }
-.capstoneschedule, .course, .student {
+.capstoneschedule, .course, .student, .teacher {
     display: flex;
     flex-flow: row nowrap;
     gap: 4rem;
@@ -176,13 +176,13 @@ label {
     font-weight: 600;
     text-align: center;
 }
-.capstoneschedule-form, .course-form, .student-form {
+.capstoneschedule-form, .course-form, .student-form, .teacher-form {
     width: 40%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;
 }
-.capstoneschedule-input, .course-input, .student-input {
+.capstoneschedule-input, .course-input, .student-input, .teacher-input {
     display: flex;
     flex-flow: column nowrap;
     gap: 0.5rem;
