@@ -98,3 +98,7 @@ TODO: HTML CSS of home.php admin > teachers, HTML CSS of home.php admin > report
 231012 21:10
 DONE: HTML CSS of home.php admin > teachers
 TODO: HTML CSS of home.php admin > reports
+
+231013 11:45
+DONE: HTML CSS of home.php admin > reports, HTML CSS of home.php student > home
+TODO: MYSQL PHP of ALL

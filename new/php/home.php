@@ -162,8 +162,42 @@
                         </div>
                         <div class="profile-information" style="display: flex; flex-flow: column nowrap; justify-content: center;">
                             <h1 style="font-size: 3.2rem; font-weight: 750;">Jane Jean D. Doe</h1>
-                            <p style="font-size: 2.2rem;">Student Number: 121201211</p>
-                            <p style="font-size: 2.2rem;">BSCS Year 3 Section 1</p>
+                            <p style="font-size: 2.2rem;">Admin</p>
+                        </div>
+                    </div>
+                    <div class="ms home studenthome">
+                        <div class="profile-picture" style="width: 13rem;">
+                            <img src="../img/profile-default.png" style="border-radius: 50%;">
+                        </div>
+                        <div class="profile-information" style="display: flex; flex-flow: column nowrap; justify-content: center;">
+                            <h1 style="font-size: 3.2rem; font-weight: 750;">Jane Jean D. Doe</h1>
+                            <p style="font-size: 2.2rem;">ID Number: 121201211</p>
+                        </div>
+                    </div>
+                    <div class="ms home studenthome">
+                        <div style="width: 70%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Courses (10)</th>
+                                        <th>GWA (1.00)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GNED 01 - Art Appreciation</td>
+                                        <td>1.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>GNED 02 - Dalumat Ng/Sa Filipino</td>
+                                        <td>1.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>GNED 03 - Mathematics in the Modern World</td>
+                                        <td>1.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     ';
