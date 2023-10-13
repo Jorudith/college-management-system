@@ -98,3 +98,7 @@ TODO: HTML CSS of home.php admin > teachers, HTML CSS of home.php admin > report
 231012 21:10
 DONE: HTML CSS of home.php admin > teachers
 TODO: HTML CSS of home.php admin > reports
+
+# Project Oct 13, 2023 11:46 am
+- Some fixes in attendance
+- starting randomizer

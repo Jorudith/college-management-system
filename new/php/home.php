@@ -12,11 +12,13 @@
         unset($_SESSION["role"]);
     }
 
-    $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
-    $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
-    $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
-    $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
-    $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
+    if (isset($_POST["submit"]) && $_POST["submit"] == "submit") {
+        $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
+        $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
+        $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
+        $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
+        $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
+    }
 
     $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
     $year_results = mysqli_query($conn, $year_sql);
@@ -243,6 +245,11 @@
                                     <button type="submit" name="submit" value="presentAll">Present All</button>
                                     <button type="submit" name="submit" value="nullAll">No Classes</button>
                                     ';
+                                    if ($_SESSION["role"] == "student") {
+                                        echo '
+                                        <button type="submit" name="submit" value="randomize">Pick Random Student</button>
+                                        ';
+                                    }
                                     if (isset($_POST["submit"]) && $_POST["submit"] == "absentAll") {
                                         $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`role` = '".$_SESSION["role"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $absentSql);
@@ -287,6 +294,16 @@
                                             if ($_SESSION["role"] == "student") {
                                                 $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                                 $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                                if ($_POST["submit"] == "randomize") {
+                                                    $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                                    $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+
+                                                    $number_rows = mysqli_num_rows($displayAttendanceResults);
+                                                    if ($number_rows != 0) {
+                                                        $random_number = rand(1, $number_rows);
+                                                    }
+                                                    
+                                                }
                                             } else if ($_SESSION["role"] == "teacher") {
                                                 $displayAttendanceSql = "SELECT `attendance`.`attendee_id` `attendee_id`, `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendee_id` = '".$_SESSION["username"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                                 $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
@@ -294,7 +311,7 @@
                                             
                                         } else if ($_SESSION["type"] == "student") {
                                             $displayAttendanceSql = "SELECT `attendance`.`attendee_id` `attendee_id`, `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendee_id` = '".$_SESSION["username"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
-                                                $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
+                                            $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
                                         }
 
                                         
