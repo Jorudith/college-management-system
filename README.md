@@ -109,3 +109,6 @@ TODO: MYSQL PHP of ALL
 
 # Project Oct 13, 2023 2:23 pm
 - Added randomizer for student recitation
+
+# Project Oct 13, 2023 9:27 pm
+- Completed PHP for capstone page

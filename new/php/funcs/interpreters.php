@@ -56,6 +56,7 @@ function to_standard_time($time) {
 
     if ($hour >= 13) {
         $hour -= 12;
+        $hour = "0".$hour;
     }
 
     return $hour.":".$minute.":".$interpreted;

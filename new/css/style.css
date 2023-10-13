@@ -100,6 +100,13 @@ th, td {
 label {
     font-weight: 650;
 }
+.err {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    font-size: 1.3rem;
+    color: red;
+}
 .ms {
     height: fit-content;
     width: 100%;

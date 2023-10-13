@@ -28,4 +28,31 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php?");
         exit();
     }
+} else if (isset($_POST["capstone"])) {
+    $date = $_POST["date"];
+    $time = $_POST["time"];
+    $program_id = $_POST["program"];
+    $class_id = $_POST["class"];
+    $course_id = $_POST["course"];
+    
+    if ($_POST["capstone"] == "add") {
+        $sql = "INSERT INTO `capstone_sched` (`date`, `time`, `program_id`, `class_id`, `course_id`) VALUES ('$date', '$time:00:00', $program_id, $class_id, $course_id);";
+        mysqli_query($conn, $sql);
+        header("Location: ../home.php?");
+        exit();
+    } else if ($_POST["capstone"] == "edit") {
+        $id = $_POST["id"];
+        if ($id == "") {
+            header("Location: ../home.php?edit_error=id_required");
+            exit();
+        } else {
+            $sql = "UPDATE `capstone_sched` SET `date` = '$date', `time` = '$time:00:00', `program_id` = $program_id, `class_id` = $class_id, `course_id` = $course_id WHERE `id` = $id;";
+            mysqli_query($conn, $sql);
+            header("Location: ../home.php?");
+            exit();
+        }
+    } else if ($_POST["capstone"] == "cancel") {
+        header("Location: ../home.php");
+        exit();
+    }
 }

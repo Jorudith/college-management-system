@@ -1,121 +1,127 @@
 <?php
     include "includes/dbh.php";
     include "funcs/interpreters.php";
+    include "funcs/sql_funcs.php";
+    
     session_start();
     $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "home";
-    // unsets selection when moving to different 
-    if ($_SESSION["option"] != "attendance") {
-        unset($_SESSION["year"]);
-        unset($_SESSION["month"]);
-        unset($_SESSION["day"]);
-        unset($_SESSION["status"]);
-        unset($_SESSION["role"]);
-    }
+    // FOR attendance page:
+        // unsets selection when moving to different 
+        if ($_SESSION["option"] != "attendance") {
+            unset($_SESSION["year"]);
+            unset($_SESSION["month"]);
+            unset($_SESSION["day"]);
+            unset($_SESSION["status"]);
+            unset($_SESSION["role"]);
+        }
 
-    if (isset($_POST["submit"]) && $_POST["submit"] == "submit") {
-        $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
-        $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
-        $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
-        $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
-        $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
-    }
+        if (isset($_POST["submit"]) && $_POST["submit"] == "submit") {
+            $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
+            $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
+            $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
+            $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
+            $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
+        }
 
-    $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
-    $year_results = mysqli_query($conn, $year_sql);
-    $day_sql = "SELECT DISTINCT day(`date`) `day` FROM `attendance` ORDER BY DAY(`date`);";
-    $day_results = mysqli_query($conn, $day_sql);
-    
-    // Patching up previous attendances of people (admin, teacher, student)
-    $adminSql = "SELECT * FROM `admin`;";
-    $teacherSql = "SELECT * FROM `teacher`;";
-    $studentSql = "SELECT * FROM `student`;";
+        $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
+        $year_results = mysqli_query($conn, $year_sql);
+        $day_sql = "SELECT DISTINCT day(`date`) `day` FROM `attendance` ORDER BY DAY(`date`);";
+        $day_results = mysqli_query($conn, $day_sql);
+        
+        // Patching up previous attendances of people (admin, teacher, student)
+        $adminSql = "SELECT * FROM `admin`;";
+        $teacherSql = "SELECT * FROM `teacher`;";
+        $studentSql = "SELECT * FROM `student`;";
 
-    $adminResults = mysqli_query($conn, $adminSql);
-    $teacherResults = mysqli_query($conn, $teacherSql);
-    $studentResults = mysqli_query($conn, $studentSql);
-    
-    // Attendance check for admins
-    foreach($adminResults as $adminResult) {
-        $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$adminResult["id"]."' ORDER BY `attendance`.`date` DESC;";
-        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
-        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
-        if ($currAttendanceDate == date("Y-m-d")) {
-            
-        } else {
-            if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                $currDate = new DateTime($adminResult["hire_date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
-                    $attendanceInsertSql."<br>";
-                    mysqli_query($conn, $attendanceInsertSql);
-                }
-            } else if (isset($currAttendanceDate["date"])) {
-                $currDate = new DateTime($currAttendanceDate["date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
-                    mysqli_query($conn, $attendanceInsertSql);
-                }
+        $adminResults = mysqli_query($conn, $adminSql);
+        $teacherResults = mysqli_query($conn, $teacherSql);
+        $studentResults = mysqli_query($conn, $studentSql);
+        
+        // Attendance check for admins
+        foreach($adminResults as $adminResult) {
+            $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$adminResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+            $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+            $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
+            if ($currAttendanceDate == date("Y-m-d")) {
                 
-            }
-        }
-    }
-    // Attendance check for teachers
-    foreach($teacherResults as $teacherResult) {
-        $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `teacher` ON `attendance`.`attendee_id` = `teacher`.`id` WHERE `attendance`.`attendee_id` = '".$teacherResult["id"]."' ORDER BY `attendance`.`date` DESC;";
-        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
-        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
-
-        if ($currAttendanceDate == date("Y-m-d")) {
-            
-        } else {
-            if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                $currDate = new DateTime($teacherResult["hire_date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
-                    mysqli_query($conn, $attendanceInsertSql);
-                }
-            } else if (isset($currAttendanceDate["date"])) {
-                $currDate = new DateTime($currAttendanceDate["date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
-                    mysqli_query($conn, $attendanceInsertSql);
+            } else {
+                if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                    $currDate = new DateTime($adminResult["hire_date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                        $attendanceInsertSql."<br>";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
+                } else if (isset($currAttendanceDate["date"])) {
+                    $currDate = new DateTime($currAttendanceDate["date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
+                    
                 }
             }
         }
-    }
-    // Attendance check for students
-    foreach($studentResults as $studentResult) {
-        $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `student` ON `attendance`.`attendee_id` = `student`.`id` WHERE `attendance`.`attendee_id` = '".$studentResult["id"]."' ORDER BY `attendance`.`date` DESC;";
-        $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
-        $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
+        // Attendance check for teachers
+        foreach($teacherResults as $teacherResult) {
+            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `teacher` ON `attendance`.`attendee_id` = `teacher`.`id` WHERE `attendance`.`attendee_id` = '".$teacherResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+            $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+            $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
 
-        if ($currAttendanceDate == date("Y-m-d")) {
-            
-        } else {
-            if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                $currDate = new DateTime($studentResult["admission_date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
-                    mysqli_query($conn, $attendanceInsertSql);
-                }
-            } else if (isset($currAttendanceDate["date"])) {
-                $currDate = new DateTime($currAttendanceDate["date"]);
-                while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                    $currDate->modify("+1 day");
-                    $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
-                    mysqli_query($conn, $attendanceInsertSql);
+            if ($currAttendanceDate == date("Y-m-d")) {
+                
+            } else {
+                if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                    $currDate = new DateTime($teacherResult["hire_date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
+                } else if (isset($currAttendanceDate["date"])) {
+                    $currDate = new DateTime($currAttendanceDate["date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
                 }
             }
         }
-    }
+        // Attendance check for students
+        foreach($studentResults as $studentResult) {
+            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `student` ON `attendance`.`attendee_id` = `student`.`id` WHERE `attendance`.`attendee_id` = '".$studentResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+            $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
+            $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
 
-    // Display of attendances
+            if ($currAttendanceDate == date("Y-m-d")) {
+                
+            } else {
+                if (mysqli_num_rows($checkAttendanceResults) == 0) {
+                    $currDate = new DateTime($studentResult["admission_date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
+                } else if (isset($currAttendanceDate["date"])) {
+                    $currDate = new DateTime($currAttendanceDate["date"]);
+                    while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                        mysqli_query($conn, $attendanceInsertSql);
+                    }
+                }
+            }
+        }
+    // FOR capstonesched:
+        date_default_timezone_set("Asia/Manila");
+        $date_plus_one = new DateTime(date("Y-m-d"));
+        $date_plus_one->modify("+1 day");
 
+        
 ?>
 
 <!DOCTYPE html>
@@ -419,7 +425,7 @@
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "capstone") {
-                    $capstoneSchedSql = "SELECT `capstone_sched`.`id` `id`, YEAR(`capstone_sched`.`date`) `year`, MONTH(`capstone_sched`.`date`) `month`, DAY(`capstone_sched`.`date`) `day`, `capstone_sched`.`time` `time`, CONCAT(`class`.`program`, ' ', `class`.`year`, '-', `class`.`section`) `class_class`, `course`.`code` `course_code` FROM `capstone_sched` INNER JOIN `course` ON `capstone_sched`.`course_id` = `course`.`id` INNER JOIN `class` ON `capstone_sched`.`class_id` = `class`.`id`;";
+                    $capstoneSchedSql = "SELECT `capstone_sched`.`id` `id`, YEAR(`capstone_sched`.`date`) `year`, MONTH(`capstone_sched`.`date`) `month`, DAY(`capstone_sched`.`date`) `day`, `capstone_sched`.`time` `time`, `program`.`abbr` `program_abbr`, `course`.`code` `course_code`, `class`.`year` `class_year`, `class`.`section` `class_section` FROM `capstone_sched` INNER JOIN `course` ON `capstone_sched`.`course_id` = `course`.`id` INNER JOIN `class` ON `capstone_sched`.`class_id` = `class`.`id` INNER JOIN `program` ON `program`.`id` = `program_id`;";
                     $capstoneSchedResults = mysqli_query($conn, $capstoneSchedSql);
                     echo '
                     <div class="ms capstoneschedule">
@@ -429,67 +435,147 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>DATE & TIME</th>
+                                        <th>PROGRAM</th>
                                         <th>CLASS</th>
                                         <th>COURSE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
                                     ';
 
                                     foreach($capstoneSchedResults as $CSR) {
                                         echo '
-                                        <td>'.$CSR["id"].'</td>
-                                        <td>'.$CSR["year"]." ".month_interpreter($CSR["month"], 0, 2)." ".$CSR["day"]." | ".to_standard_time($CSR["time"]).'</td>
-                                        <td>'.$CSR["class_class"].'</td>
-                                        <td>'.$CSR["course_code"].'</td>
-                                        ';
+                                        <tr>
+                                            <td>'.$CSR["id"].'</td>
+                                            <td>'.$CSR["year"]." ".month_interpreter($CSR["month"], 0, 2)." ".$CSR["day"]." ".to_standard_time($CSR["time"]).'</td>
+                                            <td>'.$CSR["program_abbr"].'</td>
+                                            <td>YEAR '.$CSR["class_year"].' - CLASS '.$CSR["class_section"].'</td>
+                                            <td>'.$CSR["course_code"].'</td>
+                                        </tr>';
                                     }
 
                                     echo'
-                                    <tr>
-                                        <td>00001</td>
-                                        <td>2080 September 30 20:20AM</td>
-                                        <td>BSCS 3-3</td>
-                                        <td>COSC 880</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <form class="capstoneschedule-form">
+                        ';
+                        if ($_SESSION["type"] != "student") {
+                            echo'
+                        <form class="capstoneschedule-form" method="post" action="includes/process.php">
                             <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
 
                             <div class="capstoneschedule-input">
                                 <div class="il">
                                     <label for="id">ID</label>
-                                    <select>
-                                        <option value="0">Choose ID:</option>
-                                        <option value="1">00001</option>
+                                    <select name="id">
+                                        <option disabled selected hidden value="">Choose ID:</option>
+                                        ';
+                                    $capstones = getTable($conn, "capstone_sched");
+                                    
+                                    foreach($capstones as $capstone) {
+                                        echo '
+                                        <option value="'.$capstone["id"].'">
+                                        '.$capstone["id"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
+                                    </select>
+                                </div>
+                                <div class="err">
+                                ';
+                                if (isset($_GET["edit_error"]) && $_GET["edit_error"] == 'id_required') {
+                                    echo '
+                                    <p>EDIT: Please choose an ID</p>
+                                    ';
+                                }
+                                echo'
+                                </div>
+                                <div class="il">
+                                    <label for="date">DATE</label>
+                                    <input name="date" type="date" min="'.$date_plus_one->format("Y-m-d").'" required>
+                                </div>
+
+                                <div class="il">
+                                    <label for="time">TIME</label>
+                                    <select name="time" required>
+                                        <option disabled selected hidden value="">Choose Time:</option>
+                                    ';
+                                    $startTime = 7; 
+                                    $endTime = 18; 
+
+                                    for ($i = $startTime; $i <= $endTime; $i++) {
+                                        $displayHour = ($i % 12 === 0) ? 12 : ($i % 12);
+                                        $timeDisplay = $displayHour . ":00 " . (($i >= 12 && $i !== 24) ? "PM" : "AM");
+                                        echo '<option value="'.$i.'">'.$timeDisplay.'</option>';
+                                    }
+
+                                    echo '
+                                    </select>
+                                </div>
+                                <div class="il">
+                                    <label for="program">PROGRAM</label>
+                                    <select name="program" required>
+                                        <option disabled selected hidden value="">Choose Program:</option>
+                                    ';
+                                    $programs = getTable($conn, "program");
+                                    
+                                    foreach($programs as $program) {
+                                        echo '
+                                        <option value="'.$program["id"].'">
+                                        '.$program["abbr"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
                                     </select>
                                 </div>
 
                                 <div class="il">
-                                    <label for="date">DATE</label>
-                                    <input type="date">
-                                </div>
-
-                                <div class="il">
                                     <label for="class">CLASS</label>
-                                    <input id="class" type="text" name="class" placeholder="Enter class..." required>
+                                    <select name="class" required>
+                                        <option disabled selected hidden value="">Choose Class:</option>
+                                    ';
+                                    $classes = getTable($conn, "class");
+                                    
+                                    foreach($classes as $class) {
+                                        echo '
+                                        <option value="'.$class["id"].'">
+                                        YEAR '.$class["year"].' - CLASS '.$class["section"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
+                                    </select>
                                 </div>
 
                                 <div class="il">
                                     <label for="course">COURSE</label>
-                                    <input id="course" type="text" name="course" placeholder="Enter course..." required>
+                                    <select name="course" required>
+                                        <option disabled selected hidden value="">Choose Course:</option>
+                                    ';
+                                    $courses = getTable($conn, "course");
+                                    
+                                    foreach($courses as $course) {
+                                        echo '
+                                        <option value="'.$course["id"].'">
+                                        '.$course["code"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
+                                    </select>
                                 </div>
 
                                 <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
-                                    <button>ADD</button>
-                                    <button>EDIT</button>
-                                    <button>CANCEL</button>
+                                    <button type="submit" name="capstone" value="add">ADD</button>
+                                    <button type="submit" name="capstone" value="edit">EDIT</button>
+                                    <button type="submit" name="capstone" value="cancel">CANCEL</button>
                                 </div>
                             </div>
-                        </form>
+                        </form>';
+                        }
+                    echo'
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "course") {
