@@ -2,7 +2,7 @@
     include "includes/dbh.php";
     include "funcs/interpreters.php";
     session_start();
-    $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "";
+    $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "home";
     // unsets selection when moving to different 
     if ($_SESSION["option"] != "attendance") {
         unset($_SESSION["year"]);
@@ -279,9 +279,9 @@
                                     <button type="submit" name="submit" value="presentAll">Present All</button>
                                     <button type="submit" name="submit" value="nullAll">No Classes</button>
                                     ';
-                                    if ($_SESSION["role"] == "student") {
+                                    if ($_SESSION["role"] == "student" && $_SESSION["status"] == "present") {
                                         echo '
-                                        <button type="submit" name="submit" value="randomize">Pick Random Student</button>
+                                        <button type="submit" name="submit" value="randomize">Randomize</button>
                                         ';
                                     }
                                     if (isset($_POST["submit"]) && $_POST["submit"] == "absentAll") {
@@ -329,13 +329,8 @@
                                                 $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                                 $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
                                                 if ($_POST["submit"] == "randomize") {
-                                                    $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
+                                                    $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'"))." ORDER BY RAND();";
                                                     $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
-
-                                                    $number_rows = mysqli_num_rows($displayAttendanceResults);
-                                                    if ($number_rows != 0) {
-                                                        $random_number = rand(1, $number_rows);
-                                                    }
                                                     
                                                 }
                                             } else if ($_SESSION["role"] == "teacher") {
@@ -599,6 +594,14 @@
                                     <select>
                                         <option value="0">Choose program:</option>
                                         <option value="BSCS">Bachelor of Science in Computer Science (BSCS)</option>
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="class">CLASS</label>
+                                    <select>
+                                        <option value="0">Choose class:</option>
+                                        <option value="BSCS3-1">BSCS3-1</option>
                                     </select>
                                 </div>
         

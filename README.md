@@ -106,3 +106,6 @@ TODO: HTML CSS of home.php admin > reports
 231013 11:45
 DONE: HTML CSS of home.php admin > reports, HTML CSS of home.php student > home
 TODO: MYSQL PHP of ALL
+
+# Project Oct 13, 2023 2:23 pm
+- Added randomizer for student recitation
