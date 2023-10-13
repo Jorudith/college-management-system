@@ -102,3 +102,7 @@ TODO: HTML CSS of home.php admin > reports
 # Project Oct 13, 2023 11:46 am
 - Some fixes in attendance
 - starting randomizer
+
+231013 11:45
+DONE: HTML CSS of home.php admin > reports, HTML CSS of home.php student > home
+TODO: MYSQL PHP of ALL
