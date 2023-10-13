@@ -705,10 +705,112 @@
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "report") {
-                    
+                    echo '
+                    <div class="ms report general">
+                        <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
+                            <form class="general-ul" action="home.php" method="post">
+                                <h1>GENERAL REPORTS</h1>
+                                <select name="generalreport" required>
+                                    <option disabled selected hidden value="">All</option>
+                                    <option>Courses</option>
+                                    <option>Students</option>
+                                    <option>Teachers</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Courses (10)</th>
+                                        <th>Teachers & Classes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GNED 01 - Art Appreciation</td>
+                                        <td>Jane Joe D. Doe BSCS 3-1, Jane Joe D. Doe BSCS 3-2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Students (60)</th>
+                                        <th>Classes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Janea Joe D. Doe</td>
+                                        <td>BSCS 3-1 (30)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Teachers (10)</th>
+                                        <th>Courses & Classes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Jane Joe D. Doe</td>
+                                        <td>GNED 01 BSCS 3-1, GNED 01 BSCS 3-2, GNED 02 BSCS 3-3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="ms report grading">
+                        <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
+                            <form class="grading-ul" action="home.php" method="post">
+                                <h1>GRADE REPORTS</h1>
+                                <select name="class" required>
+                                    <option disabled selected hidden value="">Class</option>
+                                    <option>BSCS 3-1</option>
+                                    <option>BSCS 3-2</option>
+                                    <option>BSCS 3-3</option>
+                                </select>
+                                <select name="course" required>
+                                    <option disabled selected hidden value="">Course</option>
+                                    <option>GNED 01</option>
+                                    <option>GNED 02</option>
+                                    <option>GNED 03</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div style="width: 100%; overflow: auto;">
+                            <table style="white-space: nowrap; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>STUDENT ID</th>
+                                        <th>NAME</th>
+                                        <th>GWA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>121201211</td>
+                                        <td>Jane Joe D. Doe</td>
+                                        <td>1.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>121201212</td>
+                                        <td>Joo Joey D. Doe</td>
+                                        <td>1.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    ';
                 }
-            
-// Nasa taas mga commits ko BORDER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
             ?>
         </section>
     </main>
