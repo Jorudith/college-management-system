@@ -112,3 +112,11 @@ TODO: MYSQL PHP of ALL
 
 # Project Oct 13, 2023 9:27 pm
 - Completed PHP for capstone page
+
+# Project Oct 14, 2023
+- Completed course PHP with appropriate access controls
+
+# Project Oct 15, 2023 7:23 pm
+- Completed student PHP add, edit, and cancel
+- Some access controls for students and teachers (removed teacher: course form, teacher page) (removed student: student page, report page, teacher page)
+- TODO: teacher access controls in reports. teacher page dynamic, add, edit, cancel. reports dynamic. profile dynamic (students grade. all users names details. profile pic lagay)
