@@ -3,6 +3,8 @@
     include "funcs/interpreters.php";
     include "funcs/sql_funcs.php";  
 
+    
+
     session_start();
     $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "home";
     // FOR attendance page:
@@ -13,15 +15,15 @@
             unset($_SESSION["day"]);
             unset($_SESSION["status"]);
             unset($_SESSION["role"]);
+        } else if ($_SESSION["option"] != "report") {
+            unset($_SESSION["reports"]);
         }
-
-        if (isset($_POST["submit"]) && $_POST["submit"] == "submit") {
             $_SESSION["year"] =  $_POST["year"] ?? $_SESSION["year"] ?? "";
             $_SESSION["month"] = $_POST["month"] ?? $_SESSION["month"] ?? "";
             $_SESSION["day"] = $_POST["day"] ?? $_SESSION["day"] ?? "";
             $_SESSION["status"] = $_POST["status"] ?? $_SESSION["status"] ?? "";
             $_SESSION["role"] = $_POST["role"] ?? $_SESSION["role"] ?? "";
-        }
+            $_SESSION["reports"] = $_POST["reports"] ?? $_SESSION["reports"] ?? "";
 
         $year_sql = "SELECT DISTINCT YEAR(`date`) `year` FROM `attendance`;";
         $year_results = mysqli_query($conn, $year_sql);
@@ -29,44 +31,42 @@
         $day_results = mysqli_query($conn, $day_sql);
         
         // Patching up previous attendances of people (admin, teacher, student)
-        $adminSql = "SELECT * FROM `admin`;";
-        $teacherSql = "SELECT * FROM `teacher`;";
-        $studentSql = "SELECT * FROM `student`;";
-
-        $adminResults = mysqli_query($conn, $adminSql);
-        $teacherResults = mysqli_query($conn, $teacherSql);
-        $studentResults = mysqli_query($conn, $studentSql);
+        $admins = getTable($conn, "admin");
+        $teachers = getTable($conn, "teacher");
+        $students = getTable($conn, "student", false, true);
         
         // Attendance check for admins
-        foreach($adminResults as $adminResult) {
-            $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$adminResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        date_default_timezone_set("Asia/Manila");
+        foreach($admins as $admin) {
+            
+            $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$admin["id"]."' ORDER BY `attendance`.`date` DESC;";
             $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
             $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
             if ($currAttendanceDate == date("Y-m-d")) {
-                
+                echo "hello";
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($adminResult["hire_date"]);
+                    $currDate = new DateTime($admin["hire_date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         $attendanceInsertSql."<br>";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
+                    
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$adminResult["id"]."', 'admin', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
-                    
                 }
             }
         }
         // Attendance check for teachers
-        foreach($teacherResults as $teacherResult) {
-            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `teacher` ON `attendance`.`attendee_id` = `teacher`.`id` WHERE `attendance`.`attendee_id` = '".$teacherResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        foreach($teachers as $teacher) {
+            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `teacher` ON `attendance`.`attendee_id` = `teacher`.`id` WHERE `attendance`.`attendee_id` = '".$teacher["id"]."' ORDER BY `attendance`.`date` DESC;";
             $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
             $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
 
@@ -74,25 +74,25 @@
                 
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($teacherResult["hire_date"]);
+                    $currDate = new DateTime($teacher["hire_date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacherResult["id"]."', 'teacher', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
                 }
             }
         }
         // Attendance check for students
-        foreach($studentResults as $studentResult) {
-            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `student` ON `attendance`.`attendee_id` = `student`.`id` WHERE `attendance`.`attendee_id` = '".$studentResult["id"]."' ORDER BY `attendance`.`date` DESC;";
+        foreach($students as $student) {
+            $checkAttendanceSql = "SELECT * FROM `attendance` INNER JOIN `student` ON `attendance`.`attendee_id` = `student`.`id` WHERE `attendance`.`attendee_id` = '".$student["id"]."' ORDER BY `attendance`.`date` DESC;";
             $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
             $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
 
@@ -100,17 +100,17 @@
                 
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($studentResult["register_date"]);
+                    $currDate = new DateTime($student["register_date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
                         $currDate->modify("+1 day");
-                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$studentResult["id"]."', 'student', null);";
+                        $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
                     }
                 }
@@ -128,7 +128,17 @@
     // FOR course page:
         $courses = getTable($conn, "course", true);
     // FOR student page:
-        $students = getTable($conn, "student");
+        $student_enrolls = getTable($conn, "student");
+    // FOR reports page:
+        $course_report_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` ORDER BY `course_code`;";
+        $course_report_results = mysqli_query($conn, $course_report_sql);
+        $course_report_grouped_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` GROUP BY `course_code` ORDER BY `course_code`;";
+        $course_report_grouped_results = mysqli_query($conn, $course_report_grouped_sql);
+
+        $student_report_sql = "SELECT `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` = `enroll`.`id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id`";
+        $student_report_results = mysqli_query($conn, $student_report_sql);
+
+        
 ?>
 
 <!DOCTYPE html>
@@ -182,27 +192,41 @@
         <section>
             <?php
                 if (isset($_SESSION["option"]) && $_SESSION["option"] == "home") {
+                    $record = getRecord($conn, $_SESSION["type"], $_SESSION["username"]);
                     if ($_SESSION["type"] != "student") {
+                        
                         echo '
                         <div class="ms home">
-                            <div class="profile-picture" style="width: 13rem;">
-                                <img src="../img/profile-default.png" style="border-radius: 50%;">
+                            <div class="profile-picture">
+                                <img src="../profile_picture_uploads/'.(($_SESSION["picture_status"] == 0) ? 'profile-default.png' : $_SESSION["picture_name"]).'">
                             </div>
                             <div class="profile-information" style="display: flex; flex-flow: column nowrap; justify-content: center;">
-                                <h1 style="font-size: 3.2rem; font-weight: 750;">Jane Jean D. Doe</h1>
-                                <p style="font-size: 2.2rem;">Admin</p>
+                                <h1 style="font-size: 3.2rem; font-weight: 750;">'.$record["f_name"].' '.$record["l_name"].'</h1>
+                                <p style="font-size: 2.2rem;">'.ucwords($_SESSION["type"]).'</p>
+                                <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
+                                    <input id="file" class="inputfile" type="file" name="image" oninput="id-form.submit()" accept=".png, .jpg, .jpeg">
+                                    <label for="file">Upload a profile picture...</label>
+                                    <input name="id" value="'.$_SESSION["username"].'" hidden>
+                                    <input name="to_be_deleted" value="../../profile_picture_uploads/'.$_SESSION["picture_name"].'" hidden>
+                                </form>
                             </div>
                         </div>
                         ';
                     } else {
                         echo'
                         <div class="ms home studenthome">
-                            <div class="profile-picture" style="width: 13rem;">
-                                <img src="../img/profile-default.png" style="border-radius: 50%;">
+                            <div class="profile-picture">
+                                <img src="../profile_picture_uploads/'.(($_SESSION["picture_status"] == 0) ? 'profile-default.png' : $_SESSION["picture_name"]).'">
                             </div>
                             <div class="profile-information" style="display: flex; flex-flow: column nowrap; justify-content: center;">
-                                <h1 style="font-size: 3.2rem; font-weight: 750;">Jane Jean D. Doe</h1>
-                                <p style="font-size: 2.2rem;">ID Number: 121201211</p>
+                                <h1 style="font-size: 3.2rem; font-weight: 750;">'.$record["f_name"].' '.$record["l_name"].'</h1>
+                                <p style="font-size: 2.2rem;">ID Number: '.$record["id"].'</p>
+                                <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
+                                    <input id="file" class="inputfile" type="file" name="image" oninput="id-form.submit()" accept=".png, .jpg, .jpeg">
+                                    <label for="file">Upload a profile picture...</label>
+                                    <input name="id" value="'.$_SESSION["username"].'" hidden>
+                                    <input name="to_be_deleted" value="../../profile_picture_uploads/'.$_SESSION["picture_name"].'" hidden>
+                                </form>
                             </div>
                         </div>
                         <div class="ms home studenthome">
@@ -233,6 +257,29 @@
                         </div>
                         ';
                     }
+                    if (isset($_GET["file_error"]) && $_GET["file_error"] == 'big') {
+                        ?>
+                        <script>
+                            alert("Your file is too big!")
+                            window.location.href = "home.php?";
+                        </script>
+                        <?php
+                    } else if (isset($_GET["file_error"]) && $_GET["file_error"] == 'error') {
+                        ?>
+                        <script>
+                            if (!alert("There was an error uploading the file!")) {
+                                window.location.href = "home.php?";
+                            }
+                        </script>
+                        <?php
+                    }  else if (isset($_GET["file_error"]) && $_GET["file_error"] == 'file') {
+                        ?>
+                        <script>
+                            alert("Please select a .png, .jpg, or .jpeg file!")
+                            window.location.href = "home.php?";
+                        </script>
+                        <?php
+                    }
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "attendance") {
                     echo '
                     <div class="ms attendance">
@@ -245,6 +292,7 @@
                                             $curr_year = $year_result["year"];
                                             echo "<option ".($_SESSION["year"] == $curr_year ? "selected" : "").">$curr_year</option>";
                                         }
+                                        
                             echo '
                                 </select>
                                 <select name="month" required>
@@ -456,7 +504,7 @@
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "capstone") {
-                    $capstoneSchedSql = "SELECT `capstone_sched`.`id` `id`, YEAR(`capstone_sched`.`date`) `year`, MONTH(`capstone_sched`.`date`) `month`, DAY(`capstone_sched`.`date`) `day`, `capstone_sched`.`time` `time`, `program`.`abbr` `program_abbr`, `course`.`code` `course_code`, `class`.`year` `class_year`, `class`.`section` `class_section` FROM `capstone_sched` INNER JOIN `course` ON `capstone_sched`.`course_id` = `course`.`id` INNER JOIN `class` ON `capstone_sched`.`class_id` = `class`.`id` INNER JOIN `program` ON `program`.`id` = `program_id`;";
+                    $capstoneSchedSql = "SELECT `capstone_sched`.`id` `id`, YEAR(`capstone_sched`.`date`) `year`, MONTH(`capstone_sched`.`date`) `month`, DAY(`capstone_sched`.`date`) `day`, `capstone_sched`.`time` `time`, `capstone_sched`.`file_status` `file_status`, `capstone_sched`.`file_name`, `program`.`abbr` `program_abbr`, `course`.`code` `course_code`, `class`.`year` `class_year`, `class`.`section` `class_section` FROM `capstone_sched` INNER JOIN `course` ON `capstone_sched`.`course_id` = `course`.`id` INNER JOIN `class` ON `capstone_sched`.`class_id` = `class`.`id` INNER JOIN `program` ON `program`.`id` = `program_id`;";
                     $capstoneSchedResults = mysqli_query($conn, $capstoneSchedSql);
                     echo '
                     <div class="ms capstoneschedule">
@@ -469,6 +517,7 @@
                                         <th>PROGRAM</th>
                                         <th>CLASS</th>
                                         <th>COURSE</th>
+                                        <th>FILE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -482,9 +531,59 @@
                                             <td>'.$CSR["program_abbr"].'</td>
                                             <td>YEAR '.$CSR["class_year"].' - CLASS '.$CSR["class_section"].'</td>
                                             <td>'.$CSR["course_code"].'</td>
+                                            <td>
+                                            ';
+                                            if ($CSR["file_status"] == 0) {
+                                                echo '
+                                                    <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
+                                                        <input id="file" class="inputfile" type="file" name="file" oninput="id-form.submit()" accept=".pdf">
+                                                        <label for="file">Choose a .pdf file...</label> 
+                                                        <input name="id" value="'.$CSR["id"].'" hidden>
+                                                        <input name="distinction" value="'.$CSR["program_abbr"].$CSR["class_year"]."-".$CSR["class_section"]." - ".$CSR["course_code"].'" hidden>
+                                                    </form>
+                                                    <div class="err">
+                                                    ';
+                                                    
+                                            } else {
+                                                echo '
+                                                <a class="a-viewimage" href="../capstone_uploads/'.$CSR["file_name"].'" target="_blank">View File</a>
+                                                <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
+                                                    <input id="file" class="inputfile" type="file" name="file" oninput="id-form.submit()" accept=".pdf">
+                                                    <label for="file">Replace .pdf file...</label> 
+                                                    <input name="id" value="'.$CSR["id"].'" hidden>
+                                                    <input name="distinction" value="'.$CSR["program_abbr"].$CSR["class_year"]."-".$CSR["class_section"]." - ".$CSR["course_code"].'" hidden>
+                                                    <input name="to_be_deleted" value="'.'../../capstone_uploads/'.$CSR["file_name"].'" hidden>
+                                                </form>
+                                                <div class="err">
+                                                ';
+                                            }
+                                            echo'
+                                            </td>
                                         </tr>';
                                     }
-
+                                    if (isset($_GET["file_error"]) && $_GET["file_error"] == 'big') {
+                                        ?>
+                                        <script>
+                                            alert("Your file is too big!")
+                                            window.location.href = "home.php?";
+                                        </script>
+                                        <?php
+                                    } else if (isset($_GET["file_error"]) && $_GET["file_error"] == 'error') {
+                                        ?>
+                                        <script>
+                                            if (!alert("There was an error uploading the file!")) {
+                                                window.location.href = "home.php?";
+                                            }
+                                        </script>
+                                        <?php
+                                    }  else if (isset($_GET["file_error"]) && $_GET["file_error"] == 'pdf') {
+                                        ?>
+                                        <script>
+                                            alert("Please select a .pdf file!")
+                                            window.location.href = "home.php?";
+                                        </script>
+                                        <?php
+                                    }
                                     echo'
                                 </tbody>
                             </table>
@@ -697,18 +796,18 @@
                                 </thead>
                                 <tbody>
                                 ';
-                                foreach($students as $student) {
+                                foreach($student_enrolls as $student_enroll) {
                                     echo '
                                     <tr>
-                                        <td>'.$student["id"].'</td>
-                                        <td>'.$student["program_abbr"].'</td>
-                                        <td>'.$student["class_class"].'</td>
-                                        <td>'.$student["full_name"].'</td>
-                                        <td>'.($student["student_sex"] == "M" ? "MALE" : "FEMALE").'</td>
-                                        <td>'.$student["student_dob"].'</td>
-                                        <td>'.$student["student_register"].'</td>
-                                        <td>'.$student["student_contact"].'</td>
-                                        <td>'.$student["student_email"].'</td>
+                                        <td>'.$student_enroll["id"].'</td>
+                                        <td>'.$student_enroll["program_abbr"].'</td>
+                                        <td>'.$student_enroll["class_class"].'</td>
+                                        <td>'.$student_enroll["full_name"].'</td>
+                                        <td>'.($student_enroll["student_sex"] == "M" ? "MALE" : "FEMALE").'</td>
+                                        <td>'.$student_enroll["student_dob"].'</td>
+                                        <td>'.$student_enroll["student_register"].'</td>
+                                        <td>'.$student_enroll["student_contact"].'</td>
+                                        <td>'.$student_enroll["student_email"].'</td>
                                     </tr>
                                     ';
                                 }
@@ -725,9 +824,9 @@
                                     <select name="id">
                                         <option disabled selected hidden value="">Choose ID:</option>
                                         ';
-                                        foreach($students as $student) {
+                                        foreach($student_enrolls as $student_enroll) {
                                             echo '
-                                            <option value="'.$student["id"].'">'.$student["id"].'</option>
+                                            <option value="'.$student_enroll["id"].'">'.$student_enroll["id"].'</option>
                                             ';
                                         }
                                         echo'
@@ -827,75 +926,119 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>PROGRAM</th>
                                         <th>CLASS</th>
                                         <th>FULL NAME</th>
-                                        <th>AGE</th>
                                         <th>SEX</th>
                                         <th>BIRTH DATE</th>
+                                        <th>HIRE DATE</th>
                                         <th>CONTACT NUMBER</th>
                                         <td>EMAIL ADDRESS</td>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                ';
+                                foreach($teachers as $teacher) {
+                                    echo '
                                     <tr>
-                                        <td>00001</td>
-                                        <td>YEAR 2 - CLASS 1</td>
-                                        <td>Jane Doe</td>
-                                        <td>21</td>
-                                        <td>FEMALE</td>
-                                        <td>2002-09-29</td>
-                                        <td>09091231234</td>
-                                        <td>jane.doe@urs.edu.ph</td>
+                                        <td>'.$teacher["id"].'</td>
+                                        <td>'.$teacher["program_abbr"].'</td>
+                                        <td>YEAR '.$teacher["class_year"].' - CLASS '.$teacher["class_section"].'</td>
+                                        <td>'.$teacher["teacher_fname"].' '.$teacher["teacher_lname"].'</td>
+                                        <td>'.($teacher["teacher_sex"] == "M" ? "MALE" : "FEMALE").'</td>
+                                        <td>'.$teacher["teacher_dob"].'</td>
+                                        <td>'.$teacher["teacher_hire"].'</td>
+                                        <td>'.$teacher["teacher_contact"].'</td>
+                                        <td>'.$teacher["teacher_email"].'</td>
                                     </tr>
+                                    ';
+                                }
+                                echo '
                                 </tbody>
                             </table>
                         </div>
-                        <form class="teacher-form">
+                        <form class="teacher-form" method="post" action="includes/process.php">
                             <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
 
-                            <div class="teacher-input">
+                            <div class="student-input">
                                 <div class="il">
                                     <label for="id">ID</label>
-                                    <select>
-                                        <option value="0">Choose ID:</option>
-                                        <option value="1">00001</option>
+                                    <select name="id">
+                                        <option disabled selected hidden value="">Choose ID:</option>
+                                        ';
+                                        foreach($teachers as $teacher) {
+                                            echo '
+                                            <option value="'.$teacher["id"].'">'.$teacher["id"].'</option>
+                                            ';
+                                        }
+                                        echo'
+                                    </select>
+                                </div>
+                                <div class="err">
+                                ';
+                                if (isset($_GET["edit_error"]) && $_GET["edit_error"] == 'id_required') {
+                                    echo '
+                                    <p>EDIT: Please choose an ID</p>
+                                    ';
+                                }
+                                echo'
+                                </div>
+        
+                                <div class="il">
+                                    <label for="program">PROGRAM</label>
+                                    <select name="program" required>
+                                        <option disabled selected hidden value="">Choose program:</option>
+                                        ';
+                                        foreach($programs as $program) {
+                                            echo '
+                                            <option value="'.$program["id"].'">'.$program["description"].' ('.$program["abbr"].')</option>
+                                            ';
+                                        }
+                                        echo'
                                     </select>
                                 </div>
 
                                 <div class="il">
-                                    <label style="width: 10%" for="fullname">FULL NAME</label>
-                                    <input id="fullname" type="text" name="fullname" placeholder="Enter full name..." required>
+                                    <label for="class">CLASS</label>
+                                    <select name="class" required>
+                                        <option disabled selected hidden value="">Choose class:</option>
+                                        ';
+                                        foreach($classes as $class) {
+                                            echo '
+                                            <option value="'.$class["id"].'">YEAR '.$class["year"].' - CLASS '.$class["section"].'</option>
+                                            ';
+                                        }
+                                        echo'
+                                    </select>
+                                </div>
+        
+                                <div class="il">
+                                    <label style="width: 10%" for="firstname">FIRST NAME</label>
+                                    <input id="firstname" type="text" name="firstname" placeholder="Enter first name..." required>
                                 </div>
 
                                 <div class="il">
-                                    <label for="age">AGE</label>
-                                    <select>
-                                        <option value="0">Select age:</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="19">19</option>
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-
-                                    </select>
+                                    <label style="width: 10%" for="lastname">LAST NAME</label>
+                                    <input id="lastname" type="text" name="lastname" placeholder="Enter last name..." required>
                                 </div>
 
                                 <div class="il">
                                     <label for="sex">SEX</label>
-                                    <select>
-                                        <option value="0">Select sex:</option>
-                                        <option value="MALE">MALE</option>
-                                        <option value="FEMALE">FEMALE</option>
+                                    <select name="sex" required>
+                                        <option disabled selected hidden value="">Select sex:</option>
+                                        <option value="M">MALE</option>
+                                        <option value="F">FEMALE</option>
                                     </select>
                                 </div>
 
                                 <div class="il">
                                     <label for="birthdate">BIRTH DATE</label>
-                                    <input type="date">
+                                    <input type="date" name="dob" required>
+                                </div>
+
+                                <div class="il">
+                                    <label for="hiredate">HIRE DATE</label>
+                                    <input type="date" name="hire_date" required>
                                 </div>
 
                                 <div class="il">
@@ -905,13 +1048,13 @@
 
                                 <div class="il">
                                     <label style="width: 10%" for="emailaddress">EMAIL ADDRESS</label>
-                                    <input id="emailaddress" type="text" name="emailaddress" placeholder="@urs.edu.ph" required>
+                                    <input id="emailaddress" type="email" name="emailaddress" placeholder="@urs.edu.ph" required>
                                 </div>
-
+        
                                 <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
-                                    <button>ADD</button>
-                                    <button>EDIT</button>
-                                    <button>CANCEL</button>
+                                    <button type="submit" name="teacher" value="add">ADD</button>
+                                    <button type="submit" name="teacher" value="edit">EDIT</button>
+                                    <button type="submit" name="teacher" value="edit">CANCEL</button>
                                 </div>
                             </div>
                         </form>
@@ -921,64 +1064,104 @@
                     echo '
                     <div class="ms report general">
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
-                            <form class="general-ul" action="home.php" method="post">
+                            <form id="report-form" action="home.php" method="post">
                                 <h1>GENERAL REPORTS</h1>
-                                <select name="generalreport" required>
-                                    <option disabled selected hidden value="">All</option>
-                                    <option>Courses</option>
-                                    <option>Students</option>
-                                    <option>Teachers</option>
+                                <select name="reports">
+                                    <option disabled selected hidden value="">Choose Reports</option>
+                                    <option '.(($_SESSION["reports"] == "all") ? "selected" : "").' value="all">All</option>
+                                    <option '.(($_SESSION["reports"] == "courses") ? "selected" : "").' value="courses">Courses</option>
+                                    <option '.(($_SESSION["reports"] == "students") ? "selected" : "").' value="students">Students</option>
+                                    <option '.(($_SESSION["reports"] == "teachers") ? "selected" : "").' value="teachers">Teachers</option>
                                 </select>
+                                <input type="submit" name="report_submit">
                             </form>
                         </div>
-                        <div style="width: 100%; overflow: auto;">
-                            <table style="white-space: nowrap; width: 100%;">
-                                <thead>
+                        ';
+                        if ($_SESSION["reports"] == "courses" || $_SESSION["reports"] == "all") {
+                            echo'
+                            <div style="width: 100%; overflow: auto;">
+                                
+                                <table style="white-space: nowrap; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Courses ('.mysqli_num_rows($course_report_grouped_results).')</th>
+                                            <th>Teachers & Classes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    ';
+                                    foreach($course_report_results as $CRR) {
+                                        if (!isset($previous_course)) {
+                                            $previous_course = $CRR["course_code"];
+                                            $teachers_classes = array($CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                        } else {
+                                            if ($previous_course == $CRR["course_code"]) {
+                                                array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                            } else {
+                                                echo '
+                                                <tr>
+                                                    <td>'.$previous_course.'</td>
+                                                    <td>'.implode(", ", $teachers_classes).'</td>
+                                                </tr>
+                                                ';
+                                                $teachers_classes = array();
+                                                $previous_course = $CRR["course_code"];
+                                                array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                            }
+                                        }
+                                    }
+                                    echo '
                                     <tr>
-                                        <th>Courses (10)</th>
-                                        <th>Teachers & Classes</th>
+                                        <td>'.$previous_course.'</td>
+                                        <td>'.implode(", ", $teachers_classes).'</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>GNED 01 - Art Appreciation</td>
-                                        <td>Jane Joe D. Doe BSCS 3-1, Jane Joe D. Doe BSCS 3-2</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div style="width: 100%; overflow: auto;">
-                            <table style="white-space: nowrap; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Students (60)</th>
-                                        <th>Classes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Janea Joe D. Doe</td>
-                                        <td>BSCS 3-1 (30)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div style="width: 100%; overflow: auto;">
-                            <table style="white-space: nowrap; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Teachers (10)</th>
-                                        <th>Courses & Classes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Jane Joe D. Doe</td>
-                                        <td>GNED 01 BSCS 3-1, GNED 01 BSCS 3-2, GNED 02 BSCS 3-3</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    ';
+                                    
+                                    echo'
+                                    </tbody>
+                                </table>
+                            </div>
+                            ';
+                        } if ($_SESSION["reports"] == "students" || $_SESSION["reports"] == "all") {
+                            echo'
+                            <div style="width: 100%; overflow: auto;">
+                                <table style="white-space: nowrap; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Students (60)</th>
+                                            <th>Classes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Janea Joe D. Doe</td>
+                                            <td>BSCS 3-1 (30)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            ';
+                        } if ($_SESSION["reports"] == "teachers" || $_SESSION["reports"] == "all"){
+                            echo'
+                            <div style="width: 100%; overflow: auto;">
+                                <table style="white-space: nowrap; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Teachers (10)</th>
+                                            <th>Courses & Classes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Jane Joe D. Doe</td>
+                                            <td>GNED 01 BSCS 3-1, GNED 01 BSCS 3-2, GNED 02 BSCS 3-3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            ';
+                        }
+                    echo '
                     </div>
                     <div class="ms report grading">
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">

@@ -120,3 +120,10 @@ TODO: MYSQL PHP of ALL
 - Completed student PHP add, edit, and cancel
 - Some access controls for students and teachers (removed teacher: course form, teacher page) (removed student: student page, report page, teacher page)
 - TODO: teacher access controls in reports. teacher page dynamic, add, edit, cancel. reports dynamic. profile dynamic (students grade. all users names details. profile pic lagay)
+
+# Project Oct 21, 2023 2:48 am
+- Completed Teacher add, edit, cancel
+- Completed profile upload picture
+- Completed capstone upload
+- Completed some reports
+- TODO: Grade. Some Reports. Access Controls
