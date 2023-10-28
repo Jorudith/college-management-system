@@ -8,8 +8,9 @@ node_modules/
 json/
 *.json
 
-# Ignore img folder
-# img/
+# Ignore img & file upload folders
+profile_picture_uploads/
+capstone_uploads/
 
 # Ignore lib folder
 lib/

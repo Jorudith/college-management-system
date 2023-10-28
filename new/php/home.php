@@ -2,7 +2,7 @@
     include "includes/dbh.php";
     include "funcs/interpreters.php";
     include "funcs/sql_funcs.php";  
-
+    include "funcs/to_gwa.php";
     
 
     session_start();
@@ -37,29 +37,31 @@
         
         // Attendance check for admins
         date_default_timezone_set("Asia/Manila");
+        $date = "".date("Y")."-08-7";
+        $date = date("Y-m-d", strtotime($date));
         foreach($admins as $admin) {
             
             $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$admin["id"]."' ORDER BY `attendance`.`date` DESC;";
             $checkAttendanceResults = mysqli_query($conn, $checkAttendanceSql);
             $currAttendanceDate = $checkAttendanceResults->fetch_assoc();
             if ($currAttendanceDate == date("Y-m-d")) {
-                echo "hello";
+                
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($admin["hire_date"]);
+                    $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         $attendanceInsertSql."<br>";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                     
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                 }
             }
@@ -74,18 +76,18 @@
                 
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($teacher["hire_date"]);
+                    $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                 }
             }
@@ -100,22 +102,25 @@
                 
             } else {
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
-                    $currDate = new DateTime($student["register_date"]);
+                    $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
-                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
+                        $currDate->modify("+1 day");
                     }
                 }
             }
         }
+    // FOR home page:
+        $student_home_report_sql = "SELECT `student_enroll`.`grade` `grade`, `course`.`code` `course_code`, `course`.`name` `course_name` FROM `student_enroll` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` WHERE `student_id` = '".$_SESSION["username"]."';";
+        $student_home_report = mysqli_query($conn, $student_home_report_sql);
     // FOR capstonesched page:
         date_default_timezone_set("Asia/Manila");
         $date_plus_one = new DateTime(date("Y-m-d"));
@@ -130,14 +135,18 @@
     // FOR student page:
         $student_enrolls = getTable($conn, "student");
     // FOR reports page:
+        // For Course Reports
         $course_report_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` ORDER BY `course_code`;";
         $course_report_results = mysqli_query($conn, $course_report_sql);
         $course_report_grouped_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` GROUP BY `course_code` ORDER BY `course_code`;";
         $course_report_grouped_results = mysqli_query($conn, $course_report_grouped_sql);
 
-        $student_report_sql = "SELECT `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` = `enroll`.`id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id`";
+        // For Student Reports
+        $student_report_sql = "SELECT DISTINCT `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section`, `student`.`class_id` `student_class` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` ORDER BY `student_class`;";
         $student_report_results = mysqli_query($conn, $student_report_sql);
 
+        $student_total_report_sql = "SELECT COUNT(`class_id`) `count` FROM `student` GROUP BY `class_id` ORDER BY `class_id`;";
+        $student_total_report_results = mysqli_query($conn, $student_total_report_sql);
         
 ?>
 
@@ -234,23 +243,29 @@
                                 <table style="white-space: nowrap; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Courses (10)</th>
-                                            <th>GWA (1.00)</th>
+                                            <th>Courses ('.mysqli_num_rows($student_home_report).')</th>
+                                            <th>GWA</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>GNED 01 - Art Appreciation</td>
-                                            <td>1.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>GNED 02 - Dalumat Ng/Sa Filipino</td>
-                                            <td>1.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>GNED 03 - Mathematics in the Modern World</td>
-                                            <td>1.00</td>
-                                        </tr>
+                                        ';
+                                        if (mysqli_num_rows($student_home_report) != 0) {
+                                            foreach($student_home_report as $shr) {
+                                                echo '
+                                                    <tr>
+                                                        <td>'.$shr["course_code"].' - '.$shr["course_name"].'</td>
+                                                        <td>'.gwa_convert($shr["grade"]).'</td>
+                                                    </tr>
+                                                ';
+                                            }
+                                        } else {
+                                            echo '
+                                                <tr>
+                                                    <td>No Subjects!</td>
+                                                </tr>
+                                            ';
+                                        }
+                                        echo'
                                     </tbody>
                                 </table>
                             </div>
@@ -405,7 +420,7 @@
                                             if ($_SESSION["role"] == "student") {
                                                 $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                                 $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
-                                                if ($_POST["submit"] == "randomize") {
+                                                if (isset($_POST["submit"]) && $_POST["submit"] == "randomize") {
                                                     $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'"))." ORDER BY RAND();";
                                                     $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
                                                 }
@@ -414,7 +429,7 @@
                                             if ($_SESSION["role"] == "student") {
                                                 $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                                 $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
-                                                if ($_POST["submit"] == "randomize") {
+                                                if (isset($_POST["submit"]) && $_POST["submit"] == "randomize") {
                                                     $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'"))." ORDER BY RAND();";
                                                     $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
                                                 }
@@ -708,6 +723,8 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>PROGRAM</th>
+                                        <th>CLASS</th>
                                         <th>COURSE CODE</th>
                                         <th>COURSE NAME</th>
                                     </tr>
@@ -717,9 +734,11 @@
                                 foreach($courses as $course) {
                                     echo '
                                     <tr>
-                                        <td>'.$course["id"].'</td>
-                                        <td>'.$course["code"].'</td>
-                                        <td>'.$course["name"].'</td>
+                                        <td>'.$course["enroll_id"].'</td>
+                                        <td>'.$course["program_abbr"].'</td>
+                                        <td>'.$course["class_class"].'</td>
+                                        <td>'.$course["course_code"].'</td>
+                                        <td>'.$course["course_name"].'</td>
                                     </tr>
                                     ';
                                 }
@@ -736,17 +755,18 @@
                             <div class="course-input">
                                 <div class="il">
                                     <label for="id">ID</label>
-                                    <select name="id">
+                                    <select name="enroll_id">
                                         <option disabled selected hidden value="">Choose ID:</option>
                                         ';
                                         foreach($courses as $course) {
                                             echo '
-                                            <option value="'.$course["id"].'">'.$course["id"].'</option>
+                                            <option value="'.$course["enroll_id"].'">'.$course["enroll_id"].'</option>
                                             ';
                                         }
                                         echo'
                                     </select>
                                 </div>
+                                <input name="course_id" value="'.$course["course_id"].'" hidden>
                                 <div class="err">
                                 ';
                                 if (isset($_GET["edit_error"]) && $_GET["edit_error"] == 'id_required') {
@@ -756,6 +776,39 @@
                                 }
                                 echo'
                                 </div>
+
+                                <div class="il">
+                                    <label for="program">PROGRAM</label>
+                                    <select name="program" required>
+                                        <option disabled selected hidden value="">Choose Program:</option>
+                                    ';        
+                                    foreach($programs as $program) {
+                                        echo '
+                                        <option value="'.$program["id"].'">
+                                        '.$program["abbr"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
+                                    </select>
+                                </div>
+
+                                <div class="il">
+                                    <label for="class">CLASS</label>
+                                    <select name="class" required>
+                                        <option disabled selected hidden value="">Choose Class:</option>
+                                    ';                                 
+                                    foreach($classes as $class) {
+                                        echo '
+                                        <option value="'.$class["id"].'">
+                                        YEAR '.$class["year"].' - CLASS '.$class["section"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo'
+                                    </select>
+                                </div>
+
                                 <div class="il">
                                     <label style="width: 10%" for="code">COURSE CODE</label>
                                     <input id="code" type="text" name="code" placeholder="Enter course code..." required>
@@ -814,108 +867,112 @@
                                 echo'
                                 </tbody>
                             </table>
-                        </div>
-                        <form class="student-form" method="post" action="includes/process.php">
-                            <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
+                        </div>';
+                        if ($_SESSION["type"] == "admin") {
+                            echo'
+                            <form class="student-form" method="post" action="includes/process.php">
+                                <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
 
-                            <div class="student-input">
-                                <div class="il">
-                                    <label for="id">ID</label>
-                                    <select name="id">
-                                        <option disabled selected hidden value="">Choose ID:</option>
-                                        ';
-                                        foreach($student_enrolls as $student_enroll) {
-                                            echo '
-                                            <option value="'.$student_enroll["id"].'">'.$student_enroll["id"].'</option>
+                                <div class="student-input">
+                                    <div class="il">
+                                        <label for="id">ID</label>
+                                        <select name="id">
+                                            <option disabled selected hidden value="">Choose ID:</option>
                                             ';
-                                        }
-                                        echo'
-                                    </select>
-                                </div>
-                                <div class="err">
-                                ';
-                                if (isset($_GET["edit_error"]) && $_GET["edit_error"] == 'id_required') {
-                                    echo '
-                                    <p>EDIT: Please choose an ID</p>
+                                            foreach($student_enrolls as $student_enroll) {
+                                                echo '
+                                                <option value="'.$student_enroll["id"].'">'.$student_enroll["id"].'</option>
+                                                ';
+                                            }
+                                            echo'
+                                        </select>
+                                    </div>
+                                    <div class="err">
                                     ';
-                                }
-                                echo'
-                                </div>
-        
-                                <div class="il">
-                                    <label for="program">PROGRAM</label>
-                                    <select name="program" required>
-                                        <option disabled selected hidden value="">Choose program:</option>
+                                    if (isset($_GET["edit_error"]) && $_GET["edit_error"] == 'id_required') {
+                                        echo '
+                                        <p>EDIT: Please choose an ID</p>
                                         ';
-                                        foreach($programs as $program) {
-                                            echo '
-                                            <option value="'.$program["id"].'">'.$program["description"].' ('.$program["abbr"].')</option>
+                                    }
+                                    echo'
+                                    </div>
+            
+                                    <div class="il">
+                                        <label for="program">PROGRAM</label>
+                                        <select name="program" required>
+                                            <option disabled selected hidden value="">Choose program:</option>
                                             ';
-                                        }
-                                        echo'
-                                    </select>
-                                </div>
+                                            foreach($programs as $program) {
+                                                echo '
+                                                <option value="'.$program["id"].'">'.$program["description"].' ('.$program["abbr"].')</option>
+                                                ';
+                                            }
+                                            echo'
+                                        </select>
+                                    </div>
 
-                                <div class="il">
-                                    <label for="class">CLASS</label>
-                                    <select name="class" required>
-                                        <option disabled selected hidden value="">Choose class:</option>
-                                        ';
-                                        foreach($classes as $class) {
-                                            echo '
-                                            <option value="'.$class["id"].'">YEAR '.$class["year"].' - CLASS '.$class["section"].'</option>
+                                    <div class="il">
+                                        <label for="class">CLASS</label>
+                                        <select name="class" required>
+                                            <option disabled selected hidden value="">Choose class:</option>
                                             ';
-                                        }
-                                        echo'
-                                    </select>
-                                </div>
-        
-                                <div class="il">
-                                    <label style="width: 10%" for="firstname">FIRST NAME</label>
-                                    <input id="firstname" type="text" name="firstname" placeholder="Enter first name..." required>
-                                </div>
+                                            foreach($classes as $class) {
+                                                echo '
+                                                <option value="'.$class["id"].'">YEAR '.$class["year"].' - CLASS '.$class["section"].'</option>
+                                                ';
+                                            }
+                                            echo'
+                                        </select>
+                                    </div>
+            
+                                    <div class="il">
+                                        <label style="width: 10%" for="firstname">FIRST NAME</label>
+                                        <input id="firstname" type="text" name="firstname" placeholder="Enter first name..." required>
+                                    </div>
 
-                                <div class="il">
-                                    <label style="width: 10%" for="lastname">LAST NAME</label>
-                                    <input id="lastname" type="text" name="lastname" placeholder="Enter last name..." required>
-                                </div>
+                                    <div class="il">
+                                        <label style="width: 10%" for="lastname">LAST NAME</label>
+                                        <input id="lastname" type="text" name="lastname" placeholder="Enter last name..." required>
+                                    </div>
 
-                                <div class="il">
-                                    <label for="sex">SEX</label>
-                                    <select name="sex" required>
-                                        <option disabled selected hidden value="">Select sex:</option>
-                                        <option value="M">MALE</option>
-                                        <option value="F">FEMALE</option>
-                                    </select>
-                                </div>
+                                    <div class="il">
+                                        <label for="sex">SEX</label>
+                                        <select name="sex" required>
+                                            <option disabled selected hidden value="">Select sex:</option>
+                                            <option value="M">MALE</option>
+                                            <option value="F">FEMALE</option>
+                                        </select>
+                                    </div>
 
-                                <div class="il">
-                                    <label for="birthdate">BIRTH DATE</label>
-                                    <input type="date" name="dob" required>
-                                </div>
+                                    <div class="il">
+                                        <label for="birthdate">BIRTH DATE</label>
+                                        <input type="date" name="dob" required>
+                                    </div>
 
-                                <div class="il">
-                                    <label for="admissiondate">REGISTER DATE</label>
-                                    <input type="date" name="register_date" required>
-                                </div>
+                                    <div class="il">
+                                        <label for="admissiondate">REGISTER DATE</label>
+                                        <input type="date" name="register_date" required>
+                                    </div>
 
-                                <div class="il">
-                                    <label style="width: 10%" for="contactnumber">CONTACT NUMBER</label>
-                                    <input id="contactnumber" type="text" name="contactnumber" placeholder="+639" required>
-                                </div>
+                                    <div class="il">
+                                        <label style="width: 10%" for="contactnumber">CONTACT NUMBER</label>
+                                        <input id="contactnumber" type="text" name="contactnumber" placeholder="+639" required>
+                                    </div>
 
-                                <div class="il">
-                                    <label style="width: 10%" for="emailaddress">EMAIL ADDRESS</label>
-                                    <input id="emailaddress" type="email" name="emailaddress" placeholder="@urs.edu.ph" required>
+                                    <div class="il">
+                                        <label style="width: 10%" for="emailaddress">EMAIL ADDRESS</label>
+                                        <input id="emailaddress" type="email" name="emailaddress" placeholder="@urs.edu.ph" required>
+                                    </div>
+            
+                                    <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
+                                        <button type="submit" name="student" value="add">ADD</button>
+                                        <button type="submit" name="student" value="edit">EDIT</button>
+                                        <button type="submit" name="student" value="edit">CANCEL</button>
+                                    </div>
                                 </div>
-        
-                                <div style="padding: 1rem 0; display: flex; gap: 0.2rem; justify-content: flex-end;">
-                                    <button type="submit" name="student" value="add">ADD</button>
-                                    <button type="submit" name="student" value="edit">EDIT</button>
-                                    <button type="submit" name="student" value="edit">CANCEL</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>';
+                        }
+                    echo'
                     </div>
                     ';
                 } else if (isset($_SESSION["option"]) && $_SESSION["option"] == "teacher") {
@@ -943,8 +1000,8 @@
                                     <tr>
                                         <td>'.$teacher["id"].'</td>
                                         <td>'.$teacher["program_abbr"].'</td>
-                                        <td>YEAR '.$teacher["class_year"].' - CLASS '.$teacher["class_section"].'</td>
-                                        <td>'.$teacher["teacher_fname"].' '.$teacher["teacher_lname"].'</td>
+                                        <td>'.$teacher["class_class"].'</td>
+                                        <td>'.$teacher["full_name"].'</td>
                                         <td>'.($teacher["teacher_sex"] == "M" ? "MALE" : "FEMALE").'</td>
                                         <td>'.$teacher["teacher_dob"].'</td>
                                         <td>'.$teacher["teacher_hire"].'</td>
@@ -1090,33 +1147,40 @@
                                     </thead>
                                     <tbody>
                                     ';
-                                    foreach($course_report_results as $CRR) {
-                                        if (!isset($previous_course)) {
-                                            $previous_course = $CRR["course_code"];
-                                            $teachers_classes = array($CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
-                                        } else {
-                                            if ($previous_course == $CRR["course_code"]) {
-                                                array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
-                                            } else {
-                                                echo '
-                                                <tr>
-                                                    <td>'.$previous_course.'</td>
-                                                    <td>'.implode(", ", $teachers_classes).'</td>
-                                                </tr>
-                                                ';
-                                                $teachers_classes = array();
+                                    if (mysqli_num_rows($course_report_grouped_results) != 0) {
+                                        foreach($course_report_results as $CRR) {
+                                            if (!isset($previous_course)) {
                                                 $previous_course = $CRR["course_code"];
-                                                array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                                $teachers_classes = array($CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                            } else {
+                                                if ($previous_course == $CRR["course_code"]) {
+                                                    array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                                } else {
+                                                    echo '
+                                                    <tr>
+                                                        <td>'.$previous_course.'</td>
+                                                        <td>'.implode(", ", $teachers_classes).'</td>
+                                                    </tr>
+                                                    ';
+                                                    $teachers_classes = array();
+                                                    $previous_course = $CRR["course_code"];
+                                                    array_push($teachers_classes, $CRR["teacher_fname"]." ".$CRR["teacher_lname"]." ".$CRR["program_abbr"]." ".$CRR["class_year"]."-".$CRR["class_section"]);
+                                                }
                                             }
                                         }
+                                        echo '
+                                        <tr>
+                                            <td>'.$previous_course.'</td>
+                                            <td>'.implode(", ", $teachers_classes).'</td>
+                                        </tr>
+                                        ';
+                                    } else {
+                                        echo '
+                                        <tr>
+                                            <td colspan="2">No Records!</td>
+                                        </tr>
+                                        ';
                                     }
-                                    echo '
-                                    <tr>
-                                        <td>'.$previous_course.'</td>
-                                        <td>'.implode(", ", $teachers_classes).'</td>
-                                    </tr>
-                                    ';
-                                    
                                     echo'
                                     </tbody>
                                 </table>
@@ -1128,15 +1192,28 @@
                                 <table style="white-space: nowrap; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Students (60)</th>
+                                            <th>Students ('.mysqli_num_rows($student_report_results).')</th>
                                             <th>Classes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Janea Joe D. Doe</td>
-                                            <td>BSCS 3-1 (30)</td>
-                                        </tr>
+                                    ';  
+                                        foreach($student_report_results as $SRS) {
+                                            if (isset($current_class) && $current_class == $SRS["student_class"]) {
+                                                
+                                            } else {
+                                                $count = $student_total_report_results->fetch_assoc()["count"];
+                                                $current_class = $SRS["student_class"];
+                                            }
+                                            
+                                            echo '
+                                            <tr>
+                                                <td>'.$SRS["student_fname"]." ".$SRS["student_lname"].'</td>
+                                                <td>'.$SRS["program_abbr"].' '.$SRS["class_year"].'-'.$SRS["class_section"].' ('.$count.')</td>
+                                            </tr>
+                                            ';  
+                                        }
+                                    echo '
                                     </tbody>
                                 </table>
                             </div>

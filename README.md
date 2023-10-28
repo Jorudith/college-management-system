@@ -127,3 +127,9 @@ TODO: MYSQL PHP of ALL
 - Completed capstone upload
 - Completed some reports
 - TODO: Grade. Some Reports. Access Controls
+
+# Project Oct 29, 2023 12:40 am
+- Completed a lot Lost track
+- tasks left to do. teachers report and grade reports
+- some finishing touches, other than that, done!
+- also changed attendance to only start at this year at aug 7
