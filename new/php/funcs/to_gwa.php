@@ -1,10 +1,10 @@
 <?php
 
 function gwa_convert($grade) {
-    if (is_numeric($grade)) {
+    if (is_numeric($grade) && !empty($grade)) {
         $rounded = round($grade);
     } else {
-        $rounded = "INC";
+        return "INC";
     }
 
     if ($rounded >= 96) {

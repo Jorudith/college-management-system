@@ -1,9 +1,9 @@
 <?php
-    include "includes/dbh.php";
-    include "funcs/interpreters.php";
-    include "funcs/sql_funcs.php";  
-    include "funcs/to_gwa.php";
-    
+    // includes
+        include "includes/dbh.php";
+        include "funcs/interpreters.php";
+        include "funcs/sql_funcs.php";  
+        include "funcs/to_gwa.php";
 
     session_start();
     $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "home";
@@ -35,10 +35,12 @@
         $teachers = getTable($conn, "teacher");
         $students = getTable($conn, "student", false, true);
         
-        // Attendance check for admins
+        // Essentials for calculating and maintaining attendance for every user
         date_default_timezone_set("Asia/Manila");
         $date = "".date("Y")."-08-7";
         $date = date("Y-m-d", strtotime($date));
+
+        // Attendance check for admins
         foreach($admins as $admin) {
             
             $checkAttendanceSql = "SELECT `attendance`.`date` `date` FROM `attendance` INNER JOIN `admin` ON `attendance`.`attendee_id` = `admin`.`id` WHERE `attendance`.`attendee_id` = '".$admin["id"]."' ORDER BY `attendance`.`date` DESC;";
@@ -136,20 +138,56 @@
         $student_enrolls = getTable($conn, "student");
     // FOR reports page:
         // For Course Reports
-        $course_report_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` ORDER BY `course_code`;";
-        $course_report_results = mysqli_query($conn, $course_report_sql);
-        $course_report_grouped_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` GROUP BY `course_code` ORDER BY `course_code`;";
-        $course_report_grouped_results = mysqli_query($conn, $course_report_grouped_sql);
+            $course_report_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` ORDER BY `course_code`;";
+            $course_report_results = mysqli_query($conn, $course_report_sql);
+            $course_report_grouped_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher`.`id` = `teacher_teaches`.`teacher_id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` GROUP BY `course_code` ORDER BY `course_code`;";
+            $course_report_grouped_results = mysqli_query($conn, $course_report_grouped_sql);
 
         // For Student Reports
-        $student_report_sql = "SELECT DISTINCT `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section`, `student`.`class_id` `student_class` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` ORDER BY `student_class`;";
-        $student_report_results = mysqli_query($conn, $student_report_sql);
+            $student_report_sql = "SELECT DISTINCT `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section`, `student`.`class_id` `student_class` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` ORDER BY `student_class`;";
+            $student_report_results = mysqli_query($conn, $student_report_sql);
 
-        $student_total_report_sql = "SELECT COUNT(`class_id`) `count` FROM `student` GROUP BY `class_id` ORDER BY `class_id`;";
-        $student_total_report_results = mysqli_query($conn, $student_total_report_sql);
-        
+            $student_total_report_sql = "SELECT COUNT(`class_id`) `count` FROM `student` GROUP BY `class_id` ORDER BY `class_id`;";
+            $student_total_report_results = mysqli_query($conn, $student_total_report_sql);
+
+        // Teacher reports
+            $teacher_report_sql = "SELECT `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `course`.`code` `course_code`, `course`.`name` `course_name`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher_teaches`.`teacher_id` = `teacher`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id`;";
+            $teacher_report_results = mysqli_query($conn, $teacher_report_sql);
+            $teacher_report_grouped_sql = "SELECT `teacher`.`f_name` `teacher_fname`, `teacher`.`l_name` `teacher_lname`, `course`.`code` `course_code`, `course`.`name` `course_name`, `class`.`year` `class_year`, `class`.`section` `class_section`, `program`.`abbr` `program_abbr` FROM `teacher` INNER JOIN `teacher_teaches` ON `teacher_teaches`.`teacher_id` = `teacher`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `teacher_teaches`.`enroll_id` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` GROUP BY `teacher`.`id`;";
+            $teacher_report_grouped_results = mysqli_query($conn, $teacher_report_grouped_sql);
+
+        // Report Grading
+            if ($_SESSION["option"] != "report") {
+                unset($_SESSION["report_program_class"]);
+                unset($_SESSION["report_course"]);
+            }
+
+            $program_class_sql = "SELECT DISTINCT `program`.`abbr` `program_abbr`, `class`.`year` `class_year`, `class`.`section` `class_section`, `enroll`.`program_id` `enroll_program_id`, `enroll`.`class_id` `enroll_class_id` FROM `enroll` INNER JOIN `program` ON `program`.`id` = `enroll`.`program_id` INNER JOIN `class` ON `class`.`id` = `enroll`.`class_id`;";
+            $program_class_results = mysqli_query($conn, $program_class_sql);
+
+            if (isset($_SESSION["report_program_class"]) && isset($_POST["report_program_class"]) && $_SESSION["report_program_class"] != $_POST["report_program_class"]) {
+                $_SESSION["report_course"] = "";
+                $_POST["report_course"] = "";
+            }
+            
+            $_SESSION["report_program_class"] = $_POST["report_program_class"] ?? $_SESSION["report_program_class"] ?? "";
+            $_SESSION["report_course"] = $_POST["report_course"] ?? $_SESSION["report_course"] ?? "";
+
+            if (isset($_SESSION["report_program_class"]) && !empty($_SESSION["report_program_class"])) {
+                $current_program = explode(",", $_SESSION["report_program_class"])[0];
+                $current_class = explode(",", $_SESSION["report_program_class"])[1];
+                $course_sql = "SELECT `course`.`code` `course_code`, `course`.`name` `course_name`, `course`.`id` `course_id` FROM `enroll` INNER JOIN `course` ON `course`.`id` = `enroll`.`course_id` WHERE `class_id` = $current_class AND `program_id` = $current_program;";
+                $course_results = mysqli_query($conn, $course_sql);
+            }
+
+            if (isset($_SESSION["report_course"]) && !empty($_SESSION["report_course"])) {
+                $current_course = $_SESSION["report_course"];
+                $student_grade_sql = "SELECT `student`.`id` `student_id`, `student`.`f_name` `student_fname`, `student`.`l_name` `student_lname`, `student_enroll`.`grade` `student_grade` FROM `student` INNER JOIN `student_enroll` ON `student_enroll`.`student_id` = `student`.`id` INNER JOIN `enroll` ON `enroll`.`id` = `student_enroll`.`enroll_id` WHERE `enroll`.`program_id` = $current_program AND `enroll`.`class_id` = $current_class AND `enroll`.`course_id` = $current_course;";
+                $student_grade_results = mysqli_query($conn, $student_grade_sql);
+                
+            }
+
 ?>
-
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -157,7 +195,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" charset="UTF-8" type="text/css" href="../css/style.css">
 
-    <link rel="icon" href="">
+    <link rel="icon" href="../img/URS-Logo.jpg">
     <title>College Management System</title>
 </head>
 <body>
@@ -1199,11 +1237,11 @@
                                     <tbody>
                                     ';  
                                         foreach($student_report_results as $SRS) {
-                                            if (isset($current_class) && $current_class == $SRS["student_class"]) {
+                                            if (isset($current_student_class) && $current_student_class == $SRS["student_class"]) {
                                                 
                                             } else {
                                                 $count = $student_total_report_results->fetch_assoc()["count"];
-                                                $current_class = $SRS["student_class"];
+                                                $current_student_class = $SRS["student_class"];
                                             }
                                             
                                             echo '
@@ -1224,15 +1262,47 @@
                                 <table style="white-space: nowrap; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Teachers (10)</th>
+                                            <th>Teachers ('.mysqli_num_rows($teacher_report_grouped_results).')</th>
                                             <th>Courses & Classes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    ';
+                                    if (mysqli_num_rows($teacher_report_results) != 0) {
+                                        foreach($teacher_report_results as $TRR) {
+                                            if (!isset($previous_teacher)) {
+                                                $previous_teacher = $TRR["teacher_fname"]." ".$TRR["teacher_lname"];
+                                                $teachers_courses = array($TRR["course_code"]." ".$TRR["program_abbr"]." ".$TRR["class_year"]."-".$TRR["class_section"]);
+                                            } else {
+                                                if ($previous_teacher == ($TRR["teacher_fname"]." ".$TRR["teacher_lname"])) {
+                                                    array_push($teachers_courses, $TRR["course_code"]." ".$TRR["program_abbr"]." ".$TRR["class_year"]."-".$TRR["class_section"]);
+                                                } else {
+                                                    echo '
+                                                    <tr>
+                                                        <td>'.$previous_teacher.'</td>
+                                                        <td>'.implode(", ", $teachers_courses).'</td>
+                                                    </tr>
+                                                    ';
+                                                    $teachers_courses = array();
+                                                    $previous_teacher = $TRR["teacher_fname"]." ".$TRR["teacher_lname"];
+                                                    array_push($teachers_courses, $TRR["course_code"]." ".$TRR["program_abbr"]." ".$TRR["class_year"]."-".$TRR["class_section"]);
+                                                }
+                                            }
+                                        }
+                                        echo '
                                         <tr>
-                                            <td>Jane Joe D. Doe</td>
-                                            <td>GNED 01 BSCS 3-1, GNED 01 BSCS 3-2, GNED 02 BSCS 3-3</td>
+                                            <td>'.$previous_teacher.'</td>
+                                            <td>'.implode(", ", $teachers_courses).'</td>
                                         </tr>
+                                        ';
+                                    } else {
+                                        echo '
+                                        <tr>
+                                            <td colspan="2">No Records!</td>
+                                        </tr>
+                                        ';
+                                    }
+                                    echo'
                                     </tbody>
                                 </table>
                             </div>
@@ -1244,18 +1314,37 @@
                         <div style="display: flex; flex-flow: row nowrap; gap: 2rem; align-items: center;">
                             <form class="grading-ul" action="home.php" method="post">
                                 <h1>GRADE REPORTS</h1>
-                                <select name="class" required>
+                                <select name="report_program_class" oninput="this.form.submit()">
                                     <option disabled selected hidden value="">Class</option>
-                                    <option>BSCS 3-1</option>
-                                    <option>BSCS 3-2</option>
-                                    <option>BSCS 3-3</option>
+                                    ';
+                                    foreach($program_class_results as $PCR) {
+                                        echo '
+                                        <option 
+                                        '.(($_SESSION["report_program_class"] == ($PCR["enroll_program_id"].",".$PCR["enroll_class_id"])) 
+                                        ? "selected" : "").' value="'.$PCR["enroll_program_id"].",".$PCR["enroll_class_id"].'">'.$PCR["program_abbr"]." ".$PCR["class_year"]."-".$PCR["class_section"].'
+                                        </option>
+                                        ';
+                                    }
+                                    echo '
                                 </select>
-                                <select name="course" required>
-                                    <option disabled selected hidden value="">Course</option>
-                                    <option>GNED 01</option>
-                                    <option>GNED 02</option>
-                                    <option>GNED 03</option>
-                                </select>
+                                ';
+
+                                if (isset($course_results)) {
+                                    echo '
+                                    <select name="report_course" oninput="this.form.submit()">
+                                        <option disabled selected hidden value="">Course</option>
+                                        ';
+                                        foreach($course_results as $CR) {
+                                            echo '
+                                                <option '.(($current_course == ($CR["course_id"])) 
+                                                ? "selected" : "").' value="'.$CR["course_id"].'">'.$CR["course_code"].'</option>
+                                            ';
+                                        }
+                                        echo '
+                                    </select>
+                                    ';
+                                }
+                                echo'
                             </form>
                         </div>
                         <div style="width: 100%; overflow: auto;">
@@ -1268,16 +1357,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>121201211</td>
-                                        <td>Jane Joe D. Doe</td>
-                                        <td>1.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>121201212</td>
-                                        <td>Joo Joey D. Doe</td>
-                                        <td>1.00</td>
-                                    </tr>
+                                    ';
+                                    if (!empty($_SESSION["report_course"])) {
+                                        if (mysqli_num_rows($student_grade_results) != 0) {
+                                            foreach($student_grade_results as $SGR) {
+                                                echo '
+                                                    <tr>
+                                                        <td>'.$SGR["student_id"].'</td>
+                                                        <td>'.$SGR["student_fname"]." ".$SGR["student_lname"].'</td>
+                                                        <td>'.gwa_convert($SGR["student_grade"]).'</td>
+                                                    </tr>
+                                                ';
+                                            }
+                                        } else {
+                                            echo '
+                                                <tr>
+                                                    <td colspan="3">No Records!</td>
+                                                </tr>
+                                            ';
+                                        }
+                                    }
+                                    echo '
                                 </tbody>
                             </table>
                         </div>

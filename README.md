@@ -133,3 +133,8 @@ TODO: MYSQL PHP of ALL
 - tasks left to do. teachers report and grade reports
 - some finishing touches, other than that, done!
 - also changed attendance to only start at this year at aug 7
+
+# Project Oct 29, 2023 4:06 pm
+- Completed everything so far
+- Finishing touches that i don't know of for now
+- Need testing
