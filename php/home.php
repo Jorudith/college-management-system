@@ -52,18 +52,18 @@
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
                     $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         $attendanceInsertSql."<br>";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                     
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$admin["id"]."', 'admin', null);";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                 }
             }
@@ -80,16 +80,16 @@
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
                     $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$teacher["id"]."', 'teacher', null);";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                 }
             }
@@ -106,16 +106,16 @@
                 if (mysqli_num_rows($checkAttendanceResults) == 0) {
                     $currDate = new DateTime($date);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                 } else if (isset($currAttendanceDate["date"])) {
                     $currDate = new DateTime($currAttendanceDate["date"]);
                     while ($currDate->format("Y-m-d-D") != date("Y-m-d-D")) {
+                        $currDate->modify("+1 day");
                         $attendanceInsertSql = "INSERT INTO `attendance` (`date`, `attendee_id`, `role`, `status`) VALUES ('".$currDate->format("Y-m-d")."', '".$student["id"]."', 'student', null);";
                         mysqli_query($conn, $attendanceInsertSql);
-                        $currDate->modify("+1 day");
                     }
                 }
             }
