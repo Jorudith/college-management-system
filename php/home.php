@@ -587,7 +587,8 @@
                                             <td>
                                             ';
                                             if ($CSR["file_status"] == 0) {
-                                                echo '
+                                                if ($_SESSION["type"] != "student") {
+                                                    echo '
                                                     <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
                                                         <input id="file" class="inputfile" type="file" name="file" oninput="id-form.submit()" accept=".pdf">
                                                         <label for="file">Choose a .pdf file...</label> 
@@ -596,19 +597,30 @@
                                                     </form>
                                                     <div class="err">
                                                     ';
+                                                } else {
+                                                    echo '
+                                                    <p class="a-viewimage">No file yet! Submit your projects to your teachers!</p>
+                                                    ';
+                                                }
+                                                
                                                     
                                             } else {
-                                                echo '
-                                                <a class="a-viewimage" href="../capstone_uploads/'.$CSR["file_name"].'" target="_blank">View File</a>
-                                                <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
-                                                    <input id="file" class="inputfile" type="file" name="file" oninput="id-form.submit()" accept=".pdf">
-                                                    <label for="file">Replace .pdf file...</label> 
-                                                    <input name="id" value="'.$CSR["id"].'" hidden>
-                                                    <input name="distinction" value="'.$CSR["program_abbr"].$CSR["class_year"]."-".$CSR["class_section"]." - ".$CSR["course_code"].'" hidden>
-                                                    <input name="to_be_deleted" value="'.'../../capstone_uploads/'.$CSR["file_name"].'" hidden>
-                                                </form>
-                                                <div class="err">
-                                                ';
+                                                if ($_SESSION["type"] != "student") {
+                                                    echo '
+                                                    <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
+                                                        <input id="file" class="inputfile" type="file" name="file" oninput="id-form.submit()" accept=".pdf">
+                                                        <label for="file">Replace .pdf file...</label> 
+                                                        <input name="id" value="'.$CSR["id"].'" hidden>
+                                                        <input name="distinction" value="'.$CSR["program_abbr"].$CSR["class_year"]."-".$CSR["class_section"]." - ".$CSR["course_code"].'" hidden>
+                                                        <input name="to_be_deleted" value="'.'../../capstone_uploads/'.$CSR["file_name"].'" hidden>
+                                                    </form>
+                                                    <div class="err">
+                                                    ';
+                                                } else {
+                                                    echo '
+                                                    <a class="a-viewimage" href="../capstone_uploads/'.$CSR["file_name"].'" target="_blank">View File</a>
+                                                    ';
+                                                }
                                             }
                                             echo'
                                             </td>
