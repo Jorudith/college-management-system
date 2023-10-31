@@ -617,7 +617,7 @@
                                     if (isset($_GET["file_error"]) && $_GET["file_error"] == 'big') {
                                         ?>
                                         <script>
-                                            alert("Your file is too big!")
+                                            alert("Your file exceeded 900mb!")
                                             window.location.href = "home.php?";
                                         </script>
                                         <?php

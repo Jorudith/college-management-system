@@ -325,7 +325,7 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
 
     if (in_array($file_actual_ext, $allowed)) {
         if ($file_error === 0) {
-            if ($file_size < 1000000) {
+            if ($file_size < 900000000) {
                 $file_name_new = date("Y_m_d-H_i_s")." ".$distinction.".".$file_actual_ext;
                 $file_destination = "../../capstone_uploads/".$file_name_new;
                 move_uploaded_file($file_tmp_name, $file_destination);
