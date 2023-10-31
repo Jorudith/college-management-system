@@ -599,7 +599,7 @@
                                                     ';
                                                 } else {
                                                     echo '
-                                                    <p class="a-viewimage">No file yet! Submit your projects to your teachers!</p>
+                                                    <p>No file yet! Submit your projects to your teachers!</p>
                                                     ';
                                                 }
                                                 
