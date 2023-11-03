@@ -605,6 +605,9 @@
                                                 
                                                     
                                             } else {
+                                                echo '
+                                                <a class="a-viewimage" href="../capstone_uploads/'.$CSR["file_name"].'" target="_blank">View File</a>
+                                                ';
                                                 if ($_SESSION["type"] != "student") {
                                                     echo '
                                                     <form id="id-form" action="includes/process.php" method="post" enctype="multipart/form-data">
@@ -615,10 +618,6 @@
                                                         <input name="to_be_deleted" value="'.'../../capstone_uploads/'.$CSR["file_name"].'" hidden>
                                                     </form>
                                                     <div class="err">
-                                                    ';
-                                                } else {
-                                                    echo '
-                                                    <a class="a-viewimage" href="../capstone_uploads/'.$CSR["file_name"].'" target="_blank">View File</a>
                                                     ';
                                                 }
                                             }
