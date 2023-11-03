@@ -1,10 +1,15 @@
 <?php
     // includes
+        // The connection to the database. This can be configured based on your existing database credentials
         include "includes/dbh.php";
+        // The interpreters are functions that interprets time and month
         include "funcs/interpreters.php";
+        // This is where some redundant sql functions are hidden for easier access
         include "funcs/sql_funcs.php";  
+        // This is the function for evaluating grades
         include "funcs/to_gwa.php";
 
+    // session start and sets the option AKA the page to whatever the user selects. Defaults to home if none
     session_start();
     $_SESSION["option"] = $_POST["option"] ?? $_SESSION["option"] ?? "home";
     // FOR attendance page:
@@ -211,6 +216,7 @@
             </h1>
             <div style="display: flex; gap: 0 1em; align-items: center;">
                 <form class="navigation-ul" method="post" action="home.php">
+                    <!-- these are the pages that are available and will be transferred to the session array -->
                     <button type="submit" name="option" value="home">Home</button>
                     <button type="submit" name="option" value="attendance">Attendance</button>
                     <button type="submit" name="option" value="capstone">Capstone Schedules</button>
@@ -238,10 +244,10 @@
     <main>
         <section>
             <?php
+            // this is how the pages are controlled and accessed
                 if (isset($_SESSION["option"]) && $_SESSION["option"] == "home") {
                     $record = getRecord($conn, $_SESSION["type"], $_SESSION["username"]);
                     if ($_SESSION["type"] != "student") {
-                        
                         echo '
                         <div class="ms home">
                             <div class="profile-picture">
@@ -410,11 +416,13 @@
                                     <button type="submit" name="submit" value="presentAll">Present All</button>
                                     <button type="submit" name="submit" value="nullAll">No Classes</button>
                                     ';
+                                    
                                     if ($_SESSION["role"] == "student" && $_SESSION["status"] == "present") {
                                         echo '
                                         <button type="submit" name="submit" value="randomize">Randomize</button>
                                         ';
                                     }
+                                    // Sql commands for what the buttons (absentall, presentall, and noclasses)
                                     if (isset($_POST["submit"]) && $_POST["submit"] == "absentAll") {
                                         $absentSql = "UPDATE `attendance` SET `status` = 'absent' WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`role` = '".$_SESSION["role"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                         mysqli_query($conn, $absentSql);
@@ -441,6 +449,7 @@
                                 <tbody>
                                     ';
                                     if (isset($_POST["submit"]) || isset($_POST["new_val"])) {
+                                        // Sql commands for changing attendance of individual records' status
                                         if (isset($_POST["new_val"]) && $_POST["new_val"] == "NULL") {
                                             $updateSql = "UPDATE `attendance` SET `status` = NULL WHERE `id` = ".$_POST["id"]."";
                                             mysqli_query($conn, $updateSql);
@@ -452,6 +461,7 @@
                                             mysqli_query($conn, $updateSql);
                                         }
 
+                                        // This changes how the attendance will display itself based on who logs in (admin/teacher/student)
                                         if ($_SESSION["type"] == "admin") {
                                             $displayAttendanceSql = "SELECT `attendance`.`id` `attendance_id`, `attendance`.`date` `date`, `".$_SESSION["role"]."`.`f_name` `f_name`, `".$_SESSION["role"]."`.`l_name`, `l_name`, `attendance`.`status` `status` FROM `attendance` INNER JOIN `".$_SESSION["role"]."` ON `attendance`.`attendee_id` = `".$_SESSION["role"]."`.`id` WHERE YEAR(`attendance`.`date`) = '".$_SESSION["year"]."' AND MONTH(`attendance`.`date`) = '".$_SESSION["month"]."' AND DAY(`attendance`.`date`) = '".$_SESSION["day"]."' AND `attendance`.`status` ".(($_SESSION["status"] == "NULL") ? ("IS ".$_SESSION["status"]) : ("= '".$_SESSION["status"]."'")).";";
                                             $displayAttendanceResults = mysqli_query($conn, $displayAttendanceSql);
@@ -482,7 +492,7 @@
                                         }
 
                                         
-
+                                        // this is the actual display of the attendance records
                                         if (mysqli_num_rows($displayAttendanceResults) != 0) {
                                             foreach($displayAttendanceResults as $displayAttendanceResult) {
                                                 $displayMonth = month_interpreter($displayAttendanceResult["date"], 5, 2);
@@ -575,7 +585,7 @@
                                 </thead>
                                 <tbody>
                                     ';
-
+                                    // Displays the current records of the capstone schedules
                                     foreach($capstoneSchedResults as $CSR) {
                                         echo '
                                         <tr>
@@ -654,6 +664,7 @@
                         </div>
                         ';
                         if ($_SESSION["type"] != "student") {
+                        // The form for adding/editing capstones
                             echo'
                         <form class="capstoneschedule-form" method="post" action="includes/process.php">
                             <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
@@ -780,6 +791,7 @@
                                 </thead>
                                 <tbody>
                                 ';
+                                // Displays the current records of the courses
                                 foreach($courses as $course) {
                                     echo '
                                     <tr>
@@ -797,6 +809,7 @@
                         </div>
                         ';
                         if ($_SESSION["type"] != "student" && $_SESSION["type"] != "teacher") {
+                        // The form for adding/editing courses
                         echo'
                         <form class="course-form" method="post" action="includes/process.php">
                             <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
@@ -898,6 +911,7 @@
                                 </thead>
                                 <tbody>
                                 ';
+                                // Displays the current students of each program & section
                                 foreach($student_enrolls as $student_enroll) {
                                     echo '
                                     <tr>
@@ -918,6 +932,7 @@
                             </table>
                         </div>';
                         if ($_SESSION["type"] == "admin") {
+                            // The form for adding/editing students
                             echo'
                             <form class="student-form" method="post" action="includes/process.php">
                                 <h1 style="font-size: 5rem; font-weight: 800;">FORM</h1>
@@ -1044,6 +1059,7 @@
                                 </thead>
                                 <tbody>
                                 ';
+                                // Displays the current records of teachers
                                 foreach($teachers as $teacher) {
                                     echo '
                                     <tr>
@@ -1059,6 +1075,7 @@
                                     </tr>
                                     ';
                                 }
+                                // The form for adding/editing teachers
                                 echo '
                                 </tbody>
                             </table>

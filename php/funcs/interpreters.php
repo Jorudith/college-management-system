@@ -1,5 +1,6 @@
 <?php
 
+// Interprets numbers and returns its interpretation in words (e.g. 01 = January)
 function month_interpreter($month, $start, $length) {
     switch (substr($month, $start, $length)) {
         case "01":
@@ -42,7 +43,7 @@ function month_interpreter($month, $start, $length) {
             break;
     }
 }
-
+// Converts military time to standard time (pm/am)
 function to_standard_time($time) {
     $hour = substr($time, 0, 2);
     $minute = substr($time, 3, 2);
@@ -61,5 +62,4 @@ function to_standard_time($time) {
 
     return $hour.":".$minute.":".$interpreted;
 }
-
 ?>

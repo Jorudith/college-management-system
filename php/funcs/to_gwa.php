@@ -1,5 +1,6 @@
 <?php
 
+// converts grades to gwa
 function gwa_convert($grade) {
     if (is_numeric($grade) && !empty($grade)) {
         $rounded = round($grade);

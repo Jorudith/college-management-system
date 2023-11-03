@@ -6,6 +6,7 @@ include "dbh.php";
 include "../funcs/sql_funcs.php";
 include "../funcs/password_generator.php";
 
+// The processes for signing in. All the needed session variables for loging in are initialized here
 if (isset($_POST["button"]) && $_POST["button"] == "signin") {
     $username = trim($_POST["username"]);
     $password = trim($_POST["password"]);
@@ -33,7 +34,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php?");
         exit();
     }
-} else if (isset($_POST["capstone"])) {
+} 
+// The processes for the capstone page
+else if (isset($_POST["capstone"])) {
     $date = $_POST["date"];
     $time = $_POST["time"];
     $program_id = $_POST["program"];
@@ -60,7 +63,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php");
         exit();
     }
-} else if (isset($_POST["course"])) {
+} 
+// The processes for the course page
+else if (isset($_POST["course"])) {
     $code = trim($_POST["code"]);
     $name = trim($_POST["name"]);
     $class = trim($_POST["class"]);
@@ -103,7 +108,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php");
         exit();
     }
-} else if (isset($_POST["student"])) {
+} 
+// The processes for the student page
+else if (isset($_POST["student"])) {
     $program = $_POST["program"];
     $class = $_POST["class"];
     $firstname = trim($_POST["firstname"]);
@@ -203,7 +210,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php");
         exit();
     } 
-} else if (isset($_POST["teacher"])) {
+} 
+// The processes for the teacher page
+else if (isset($_POST["teacher"])) {
     $program = $_POST["program"];
     $class = $_POST["class"];
     $firstname = trim($_POST["firstname"]);
@@ -304,7 +313,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php");
         exit();
     } 
-} else if (isset($_FILES["file"])) {
+} 
+// The processes for uploading files, specifically for uploading capstone files
+else if (isset($_FILES["file"])) {
     date_default_timezone_set("Asia/Manila");
 
     $id = $_POST["id"];
@@ -351,7 +362,9 @@ if (isset($_POST["button"]) && $_POST["button"] == "signin") {
         header("Location: ../home.php?file_error=pdf");
         exit();
     }
-} else if (isset($_FILES["image"])) {
+} 
+// The processes for uploading images, specifically profile images
+else if (isset($_FILES["image"])) {
     date_default_timezone_set("Asia/Manila");
 
     $id = $_POST["id"];

@@ -1,5 +1,6 @@
 <?php
 
+// gets records from sepcific tables
 function getTable($connection, $table, $in_course_page=false, $simple=false) {
     if ($table == "course" && !$in_course_page) {
         $sql = "SELECT * FROM $table;";
@@ -28,6 +29,7 @@ function getTable($connection, $table, $in_course_page=false, $simple=false) {
     }
 }
 
+// gets a specific record from a specific table
 function getRecord($connection, $table, $id) {
     $sql = "SELECT * FROM $table WHERE `id` = '$id';";
     $record = mysqli_query($connection, $sql);
